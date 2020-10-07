@@ -1,6 +1,6 @@
 empirical_eyes
 
-# Publishing a data science projects
+# Publishing a data science project
 
 ### I – ANALYZING THE COVID 19 INFECTION DEVELOPMENT
 
