@@ -232,6 +232,33 @@ print(population)
 population.to_excel("Population_input.xlsx", sheet_name='Tabelle1') 
 ```
 
-xxx 
+For the purpose of futher analyzing and displaying the data and results I'm creating two separate data sets. One data set contains the full history of Covid19 infections and can be used e.g. to display for one specific country the development over time. The second data set is a subset of the first data set and only focuses on the latest snap shot figures and here the aim is to use this information for an overview and comparison of many/all countries regarding the current Covid19 situation. The two data sets are being   stored as Excel files.
+
+```
+# (5) Export two analysis data sets (a) full history time series (b) only current day figures
+confirmed_cntpsel = confirmed_cntpfull.loc[:,[ 'Region_CD', 'Region_NM', 'Country/Region', 'Cntry_CD', 'confi', 'confi_new',                                              
+                                               'cluster', 'clusterp7', 'levelcma7d', 'ma7dlvlc',  'clusterdev', 'kippt', 'ma7dmma7dp1', 'goldencross', 'ma7dmma14d',
+                                               'ma3d', 'ma7d', 'ma14d', 'ma21d', 'ma7dp7',
+                                               'daysdouble', 'incident', 'incident7d', 'incident7dp7', 'confi_estshpop', 'population', 'Rank_Pop', 'datum']]            
+
+confirmed_cntpsel1 = confirmed_cntpfull.loc[:,[ 'Country/Region', 'Cntry_CD', 'Rank_Pop', 'datum', 'confi_new', 'ma3d', 'ma7d', 'ma14d', 'ma21d']]            
+confirmed_cntpsel1.to_excel(locpath1+"covid_ana_tsa1.xlsx", sheet_name='Tabelle1')
+
+
+confirmed_cntpsel = confirmed_cntpsel.sort_values(['Rank_Pop', 'datum'], ascending=[True, False])
+confirmed_cntpsel = confirmed_cntpsel.reset_index()
+confirmed_cntpsel = confirmed_cntpsel.drop(columns=['index'])
+
+yd = pd.to_datetime('today').floor('d') - timedelta(days=1)
+confirmed_cntpselday = confirmed_cntpsel[(confirmed_cntpsel['datum']==yd)] 
+confirmed_cntpselday = confirmed_cntpselday.sort_values(['datum','Rank_Pop'], ascending=[False, True])
+confirmed_cntpselday = confirmed_cntpselday.reset_index()
+confirmed_cntpselday = confirmed_cntpselday.drop(columns=['index'])
+
+confirmed_cntpselday1 = confirmed_cntpselday.loc[:,[ 'Region_CD', 'Region_NM', 'Country/Region', 'Cntry_CD', 'Rank_Pop', 'population', 'datum', 'ma7d', 'ma7dp7', 'cluster', 
+                                                     'clusterp7', 'clusterdev']]            
+confirmed_cntpselday1.to_excel(locpath1+"covid_ana_day1.xlsx", sheet_name='Tabelle1')
+```
+
 
 #### 4 - From local to cloud
