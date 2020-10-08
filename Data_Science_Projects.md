@@ -11,8 +11,8 @@ In my case - at the beginning of the covid crisis - I was very much interested i
 My goal was not to rely on any third-party reports which I could not modify or update according to my interests and needs (e.g. which countries are displayed, which figures are shown, which time comparison is displayed etc.) but to build up an analysis/report which reflected my approach of describing the current covid situation. The basic idea was to somehow scan the typical (i.e. "bell shaped") covid curve of new infections for each and every country and then to position each country on such a "typical generic bell shaped covid curve" in order to get an overview on one page. 
 
 The basic idea is sketched on following two slides: 
-![Desc1](Description_Covid_Scan_page1.jpg)
-![Desc2](Description_Covid_Scan_page2.jpg)
+[Goal of the Analysis](Description_Covid_Scan_page1.jpg)
+[Method of the Analysis](Description_Covid_Scan_page2.jpg)
 
 ### 2 - Data science software
 
@@ -315,6 +315,128 @@ for i in range(rows):
        page.save(jpeg_file, 'JPEG')
 ```
 
+
+
+```
+# (7) Calculation of covid scan and print into pdf
+
+df = pd.read_excel(locpath1+"covid_ana_day1.xlsx", keep_default_na=False)
+
+df.loc[(df['clusterdev'] == 1), 'clusterdevc'] = 'g'
+df.loc[(df['clusterdev'] == 0), 'clusterdevc'] = 'b'
+df.loc[(df['clusterdev'] == -1), 'clusterdevc'] = 'r'
+df = df.loc[:,['Country/Region', 'Cntry_CD', 'cluster', 'clusterdev', 'clusterdevc', 'Rank_Pop']]
+df['rnk_plot'] = df.groupby(['cluster']).cumcount()+1
+
+
+def posi(clus,xst,xincr,yst,yincr,spaln):
+    
+    df.loc[(df['cluster'] == clus) & (df['rnk_plot']<=1*spaln), 'x'] = xst + (df['rnk_plot']-1)*xincr
+    df.loc[(df['cluster'] == clus) & (df['rnk_plot']>1*spaln) & (df['rnk_plot']<=2*spaln), 'x'] = xst + (df['rnk_plot']-1*spaln-1)*xincr
+    df.loc[(df['cluster'] == clus) & (df['rnk_plot']>2*spaln) & (df['rnk_plot']<=3*spaln), 'x'] = xst + (df['rnk_plot']-2*spaln-1)*xincr
+    df.loc[(df['cluster'] == clus) & (df['rnk_plot']>3*spaln) & (df['rnk_plot']<=4*spaln), 'x'] = xst + (df['rnk_plot']-3*spaln-1)*xincr
+    df.loc[(df['cluster'] == clus) & (df['rnk_plot']>4*spaln) & (df['rnk_plot']<=5*spaln), 'x'] = xst + (df['rnk_plot']-4*spaln-1)*xincr
+    df.loc[(df['cluster'] == clus) & (df['rnk_plot']>5*spaln) & (df['rnk_plot']<=6*spaln), 'x'] = xst + (df['rnk_plot']-5*spaln-1)*xincr
+    
+    df.loc[(df['cluster'] == clus) & (df['rnk_plot']<=1*spaln), 'y'] = yst
+    df.loc[(df['cluster'] == clus) & (df['rnk_plot']>1*spaln) & (df['rnk_plot']<=2*spaln), 'y'] = yst-1*yincr
+    df.loc[(df['cluster'] == clus) & (df['rnk_plot']>2*spaln) & (df['rnk_plot']<=3*spaln), 'y'] = yst-2*yincr
+    df.loc[(df['cluster'] == clus) & (df['rnk_plot']>3*spaln) & (df['rnk_plot']<=4*spaln), 'y'] = yst-3*yincr
+    df.loc[(df['cluster'] == clus) & (df['rnk_plot']>4*spaln) & (df['rnk_plot']<=5*spaln), 'y'] = yst-4*yincr
+    df.loc[(df['cluster'] == clus) & (df['rnk_plot']>5*spaln) & (df['rnk_plot']<=6*spaln), 'y'] = yst-5*yincr
+    
+posi('q0',  -6,0.5,0.15,0.03,8)
+posi('q1',  -6,0.5,0.35,0.03,8)
+posi('q2',-1.5,0.5,0.55,0.03,6)
+posi('q3',   2,0.5,0.45,0.03,8)
+posi('q4',   2,0.5, 0.3,0.03,8)
+posi('q5',   3,0.5, 0.1,0.03,8)
+
+df = df.loc[:,['Cntry_CD', 'x', 'y','cluster','clusterdev','clusterdevc','rnk_plot']]
+td = date.today()
+
+#print(df)
+#print(td)
+
+#import matplotlib.pyplot as plt
+# Initialize:
+#with PdfPages('C:/Sicherung_Home/999_Themen/Covid19/00_Scan/covid_scan_200609.pdf') as pdf:
+#dir = 'C:/Users/Marc Wellner/01_projects/streamlit/01_covid_scan/'+'trend_'+cntrysel+'.pdf'
+def ploti(sele):
+    with PdfPages(locpath1+"covid_scan_"+sele+"_"+str(td)+".pdf") as pdf:
+     
+        # As many times as you like, create a figure fig and save it:
+        fig, ax = plt.subplots()
+        fig.suptitle('Covid19 Curve - ' + sele + ': ' +str(td), fontsize=12, fontweight='bold')
+    
+        a = np.linspace(-6, 0.8, 1000)
+        ax.plot(a, 1 / np.sqrt(2*np.pi) * np.exp(-(a**2)/2), color = 'red', label='high level', linewidth=8)
+    
+        b = np.linspace(0.8, 1.8, 1000)
+        ax.plot(b, 1 / np.sqrt(2*np.pi) * np.exp(-(b**2)/2), color = 'orange', label='mid level', linewidth=8)
+    
+        c = np. linspace(1.8, 6, 1000)
+        ax.plot(c, 1 / np.sqrt(2*np.pi) * np.exp(-(c**2)/2), color = 'green', label='low level', linewidth=8)
+
+        d = np. linspace(-6, 6, 1000)
+        ax.plot(d, 1 / np.sqrt(2*np.pi) * np.exp(-(d**2)/2)+0.15, color = 'black', label='low level', linewidth=0)
+    
+        #ax.set_xticks([])
+        #ax.set_yticks([])
+        ax.axis('off')
+    
+        rows, cols = df.shape
+        for i in range(rows):
+            ax.annotate('{}'.format(df.iloc[i, 0]), xy=(df.iloc[i, 1], df.iloc[i, 2]),fontsize=8,fontname='Sans', color = df.iloc[i, 5]) 
+        #ax.text(df.iloc[i, 1], df.iloc[i, 2], '{}'.format(df.iloc[i, 0]), fontsize=8) 
+
+        # When no figure is specified the current figure is saved
+        pdf.savefig(fig)
+        plt.close()
+    
+    
+        fig, ax = plt.subplots()
+        d = np. linspace(-6, 6, 1000)
+        ax.plot(d, 1 / np.sqrt(2*np.pi) * np.exp(-(d**2)/2)+0.2, color = 'black', label='low level', linewidth=0)
+        fig.suptitle('Definition of 6 cluster, considered countries and datasource', fontsize=10, fontweight='bold')
+   
+        ax.text(-7, 0.60, "C0: Current cumulative Covid19 infections are < 1.000 cases",fontsize=6,fontname='Sans')
+    
+        ax.text(-7, 0.58, "C1: Increasing new daily Covid19 infections",fontsize=6,fontname='Sans')
+        ax.text(-7, 0.56, "    -> Avg 7 days level > 70% of max avg 7 days level so far",fontsize=6,fontname='Sans')
+        ax.text(-7, 0.54, "    -> Avg 7 days level > Avg 14 days level",fontsize=6,fontname='Sans')
+        ax.text(-7, 0.52, "    -> Avg 7 days level increases",fontsize=6,fontname='Sans')
+    
+        ax.text(-7, 0.50, "C2: Potentialy reaching the peak of new daily Covid19 infections",fontsize=6,fontname='Sans')
+        ax.text(-7, 0.48, "    -> Avg 7 days level > 70% of max avg 7 days level so far",fontsize=6,fontname='Sans')
+        ax.text(-7, 0.46, "    -> Avg 7 days level > Avg 14 days level",fontsize=6,fontname='Sans')
+        ax.text(-7, 0.44, "    -> Avg 7 days level decreases",fontsize=6,fontname='Sans')
+
+        ax.text(-7, 0.42, "C3: Indication of decreasing new daily Covid19 infections",fontsize=6,fontname='Sans')
+        ax.text(-7, 0.40, "    -> Avg 7 days level > 70% of max avg 7 days level so far",fontsize=6,fontname='Sans')
+        ax.text(-7, 0.38, "    -> Avg 7 days level < Avg 14 days level",fontsize=6,fontname='Sans')
+
+        ax.text(-7, 0.36, "C4: Decreased number of new daily Covid19 infections",fontsize=6,fontname='Sans')
+        ax.text(-7, 0.34, "    -> Avg 7 days level between 30% and 70% of max avg 7 days level so far",fontsize=6,fontname='Sans')
+
+        ax.text(-7, 0.32, "C5: Low number of new daily Covid19 infections",fontsize=6,fontname='Sans')
+        ax.text(-7, 0.30, "    -> Avg 7 days level < 30% max avg 7 days level so far",fontsize=6,fontname='Sans')
+    
+        ax.text(-7, 0.26, "Selected countries: All online countries",fontsize=6,fontname='Sans')
+        ax.text(-7, 0.24, "Cluster dynamic (color coding):",fontsize=6,fontname='Sans')
+        ax.text(-7, 0.22, " - Countries which have shifted since last snapshot to a higher cluster (e.g. C0 -> C2) are green",fontsize=6,fontname='Sans')
+        ax.text(-7, 0.20, " - Countries which have shifted since last snapshot to a lower cluster (e.g. C4 -> C3) are red",fontsize=6,fontname='Sans')
+        ax.text(-7, 0.18, " - Countries which have remained since last snapshot in the same cluster are blue",fontsize=6,fontname='Sans')
+        ax.text(-7, 0.16, "Country sorting: Within each cluster countries are sorted according to population",fontsize=6,fontname='Sans')
+        ax.text(-7, 0.14, "Datasource: D2019 Novel Coronavirus COVID-19 (2019-nCoV) Data Repository by Johns Hopkins CSSE",fontsize=6,fontname='Sans')
+    
+        ax.axis('off')
+        pdf.savefig()  # saves the current figure into a pdf page
+        plt.close()
+
+
+ploti('All_Countries')
+```
 
 
 ### 4 - From local to cloud
