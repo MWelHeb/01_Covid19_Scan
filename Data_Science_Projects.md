@@ -315,11 +315,10 @@ for i in range(rows):
        page.save(jpeg_file, 'JPEG')
 ```
 
-The pdf or jpg output of such (moving average) devlopment plot (e.g. for Germany) would look as follows:
+The pdf or jpg output of such a (moving average) devlopment plot (e.g. for Germany) would look as follows:
 ![Trend Example](trend_DE.jpg)
 
-
-xxxx
+Additionally to the historical development for each and every country we are in particular interested to have a "one page" overview on the current Covid19 situation for all countries at once. The coding for this purpose is given below. Basically it also works with Python functions. The first function defines for each country the position on the typical bell shaped covid curve. This position depends on the cluster to which the country is allocated as well as the country ranking within the cluster according to population size. On top of that also the font color is specified depending on whether the country has shifted from one cluster to another cluster since the last snap shot. Once this is evaluated for all countries the second function fulfills the plot into a pdf file for the given data set of all countries. Obviously one can also limit the data set to countries of one region (e.g. Asia) and the conduct the plot only for those countries.
 
 ```
 # (7) Calculation of covid scan and print into pdf
@@ -359,13 +358,6 @@ posi('q5',   3,0.5, 0.1,0.03,8)
 df = df.loc[:,['Cntry_CD', 'x', 'y','cluster','clusterdev','clusterdevc','rnk_plot']]
 td = date.today()
 
-#print(df)
-#print(td)
-
-#import matplotlib.pyplot as plt
-# Initialize:
-#with PdfPages('C:/Sicherung_Home/999_Themen/Covid19/00_Scan/covid_scan_200609.pdf') as pdf:
-#dir = 'C:/Users/Marc Wellner/01_projects/streamlit/01_covid_scan/'+'trend_'+cntrysel+'.pdf'
 def ploti(sele):
     with PdfPages(locpath1+"covid_scan_"+sele+"_"+str(td)+".pdf") as pdf:
      
@@ -385,15 +377,12 @@ def ploti(sele):
         d = np. linspace(-6, 6, 1000)
         ax.plot(d, 1 / np.sqrt(2*np.pi) * np.exp(-(d**2)/2)+0.15, color = 'black', label='low level', linewidth=0)
     
-        #ax.set_xticks([])
-        #ax.set_yticks([])
         ax.axis('off')
     
         rows, cols = df.shape
         for i in range(rows):
             ax.annotate('{}'.format(df.iloc[i, 0]), xy=(df.iloc[i, 1], df.iloc[i, 2]),fontsize=8,fontname='Sans', color = df.iloc[i, 5]) 
-        #ax.text(df.iloc[i, 1], df.iloc[i, 2], '{}'.format(df.iloc[i, 0]), fontsize=8) 
-
+        
         # When no figure is specified the current figure is saved
         pdf.savefig(fig)
         plt.close()
@@ -438,9 +427,11 @@ def ploti(sele):
         pdf.savefig()  # saves the current figure into a pdf page
         plt.close()
 
-
 ploti('All_Countries')
 ```
+
+The pdf or jpg output of such an overview plot (e.g. for all countries world wide) would look as follows:
+![Overview Example](covid_scan_All_Countries_2020-10-04.jpg)
 
 
 ### 4 - From local to cloud
