@@ -316,7 +316,7 @@ for i in range(rows):
 ```
 
 The pdf or jpg output of such (moving average) devlopment plot (e.g. for Germany) would look as follows:
-![Desc1](Trend_DE.jpg)
+![Trend Example](trend_DE.jpg)
 
 
 xxxx
