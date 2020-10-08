@@ -2,9 +2,9 @@ empirical_eyes
 
 # Publishing a data science project
 
-### I – ANALYZING THE COVID 19 INFECTION DEVELOPMENT
+## I – ANALYZING THE COVID 19 INFECTION DEVELOPMENT
 
-#### 1 - Starting point - to have a (data science) question. 
+### 1 - Starting point - to have a (data science) question. 
 
 In my case - at the beginning of the covid crisis - I was very much interested in having an overview on the status of covid19 infections in the various countries at each point in time. Working in the airline industry I was particularly interested in so-called online countries, i.e. countries which had formerly, i.e. before the covid19 breakout, been online connected by the airline under consideration. Idea was to early identify those countries which had covid19 "under control", because these would be the first countries, where airline travel demand would pick up again. 
 
@@ -14,7 +14,7 @@ The basic idea is sketched on following two slides:
 ![Desc1](Description_Covid_Scan_page1.jpg)
 ![Desc2](Description_Covid_Scan_page2.jpg)
 
-#### 2 - Data science software
+### 2 - Data science software
 
 Apart from the (data science) question you obviously have to have access to a data science software that provides the required functionalities you need in order to collect, modify/manipulate and finally analyse and display the data and results.
 
@@ -24,14 +24,14 @@ How to install Python in which version and with which modules? There are various
 
 After having installed Anaconda you have a set of programming editors and IDEs (e.g. Jupyter Notebook, JupytherLab, Spyder, PyCharm, etc.) at hand. For a nice overview and comparison of such Python IDEs and code editors see under following [Link](https://www.datacamp.com/community/tutorials/top-python-ides-for-2019). I have started of with JupytherLab and later additionally also used Spyder.
 
-#### 3 - Data analysis
+### 3 - Data analysis
 
 In the following I will describe the various steps of the data analysis which have been conducted including the corresponding python script. If you would like to see the full final python scripts please look here:
 
 - [Data_Preparation_(01__run_covid_sv_1.py)](01_run_covid_sv_1.py)
 - [Web_Application_(02_web_covid_sv_1.py)](02_web_covid_sv_1.py)
 
-##### 3a - Data Preparation
+#### 3a - Data Preparation
 
 The first script is focussing on preprocessing the data and doing the necessary calculations for the analysis. After this has been done the preprocessed data is than being stored in some Excel files. The second script reads/opens this preprocessed data and than focuses in particular on displaying the results to the enduser. 
 
@@ -300,4 +300,4 @@ for i in range(rows):
 
 
 
-#### 4 - From local to cloud
+### 4 - From local to cloud
