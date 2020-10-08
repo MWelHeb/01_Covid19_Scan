@@ -433,5 +433,323 @@ ploti('All_Countries')
 The pdf or jpg output of such an overview plot (e.g. for all countries world wide) would look as follows:
 ![Overview Example](covid_scan_All_Countries_2020-10-08.jpg)
 
+Finally I'm interested in some statistics, e.g. the share of countries/population in each cluster and the corresponing development. For that purpose had to do some data manipulation for which I used SQL which is in Pyhton available in a module pandasql.
+
+```
+# (8) Some Statistics
+
+df = pd.read_excel(locpath1+"covid_ana_day1.xlsx", keep_default_na=False)
+
+df['cnt']=1
+
+df.loc[(df.Region_CD == 'AF') | (df.Region_CD == 'NO') | (df.Region_CD == '') ,'Region_GRP'] = 'AFNO'
+df.loc[(df.Region_CD == 'AP') ,'Region_GRP'] = 'AP'
+df.loc[(df.Region_CD == 'EU') ,'Region_GRP'] = 'EU'
+df.loc[(df.Region_CD == 'NA') | (df.Region_CD == 'SA') ,'Region_GRP'] = 'NASA'
+
+df.loc[(df.Region_GRP == 'AFNO') ,'Region_GRPNM'] = 'Africa/Middle East'
+df.loc[(df.Region_GRP == 'AP') ,'Region_GRPNM'] = 'Asia Pacific'
+df.loc[(df.Region_GRP == 'EU') ,'Region_GRPNM'] = 'Europe'
+df.loc[(df.Region_GRP == 'NASA') ,'Region_GRPNM'] = 'Americas'
+
+df.loc[(df.cluster == 'q0') ,'cluster_NM'] = 'C0'
+df.loc[(df.cluster == 'q1') ,'cluster_NM'] = 'C1'
+df.loc[(df.cluster == 'q2') ,'cluster_NM'] = 'C2'
+df.loc[(df.cluster == 'q3') ,'cluster_NM'] = 'C3'
+df.loc[(df.cluster == 'q4') ,'cluster_NM'] = 'C4'
+df.loc[(df.cluster == 'q5') ,'cluster_NM'] = 'C5'
+
+df.loc[(df.clusterp7 == 'q0') ,'clusterp7_NM'] = 'C0'
+df.loc[(df.clusterp7 == 'q1') ,'clusterp7_NM'] = 'C1'
+df.loc[(df.clusterp7 == 'q2') ,'clusterp7_NM'] = 'C2'
+df.loc[(df.clusterp7 == 'q3') ,'clusterp7_NM'] = 'C3'
+df.loc[(df.clusterp7 == 'q4') ,'clusterp7_NM'] = 'C4'
+df.loc[(df.clusterp7 == 'q5') ,'clusterp7_NM'] = 'C5'
+
+#print(df)
+
+pysqldf = lambda q: sqldf(q, globals())
+
+#### Aggregation auf Cluster per Region 
+
+# (A) Current day 
+
+q = """select
+      aa.Region_GRP, 
+      aa.cluster_NM, 
+      aa.cntr_reg,
+      aa.pop_reg,
+      bb.cntr_regt,
+      bb.pop_regt,
+      bb.ma7d_regt,
+      bb.inced_regt
+     from 
+      (SELECT 
+         a.Region_GRP, 
+         a.cluster_NM, 
+         sum(a.cnt) as cntr_reg,
+         sum(a.population) as pop_reg
+       FROM df a 
+       group by a.Region_GRP, a.cluster_NM) aa
+      
+      inner join 
+      
+      (select 
+        b.Region_GRP,
+        sum(b.cnt) as cntr_regt, 
+        sum(b.population) as pop_regt,
+        sum(b.ma7d) as ma7d_regt,
+        sum(b.ma7d)/sum(b.population)*100000 as inced_regt
+        from df b
+       group by b.Region_GRP ) bb
+      on aa.Region_GRP = bb.Region_GRP
+     
+      order by aa.Region_GRP, aa.cluster_NM;"""
+
+df_aggreg = pysqldf(q)
+df_aggreg ['pctcntr'] = df_aggreg ['cntr_reg']/df_aggreg ['cntr_regt']
+df_aggreg ['pctpop'] = df_aggreg ['pop_reg']/df_aggreg ['pop_regt']
+#print(df_aggreg)
+
+#### Output für späteres Histogramm 
+df_aggreg.to_excel(locpath1+"covid_ana_day_agg_cluster.xlsx", sheet_name='Tabelle1')
+
+# (B) 7 days before current day 
+
+q = """select
+      aa.Region_GRP, 
+      aa.clusterp7_NM, 
+      aa.cntrp7_reg,
+      aa.popp7_reg,
+      bb.cntrp7_regt,
+      bb.popp7_regt,
+      bb.ma7dp7_regt,
+      bb.incedp7_regt
+     from 
+      (SELECT 
+         a.Region_GRP, 
+         a.clusterp7_NM, 
+         sum(a.cnt) as cntrp7_reg,
+         sum(a.population) as popp7_reg
+       FROM df a 
+       group by a.Region_GRP, a.clusterp7_NM) aa
+      
+      inner join 
+      
+      (select 
+        b.Region_GRP,
+        sum(b.cnt) as cntrp7_regt, 
+        sum(b.population) as popp7_regt,
+        sum(b.ma7dp7) as ma7dp7_regt,
+        sum(b.ma7dp7)/sum(b.population)*100000 as incedp7_regt
+        from df b
+       group by b.Region_GRP ) bb
+      on aa.Region_GRP = bb.Region_GRP
+     
+      order by aa.Region_GRP, aa.clusterp7_NM;"""
+
+
+df_aggregp7 = pysqldf(q)
+df_aggregp7 ['pctcntrp7'] = df_aggregp7 ['cntrp7_reg']/df_aggregp7 ['cntrp7_regt']
+df_aggregp7 ['pctpopp7'] = df_aggregp7 ['popp7_reg']/df_aggregp7 ['popp7_regt']
+#print(df_aggregp7)
+
+
+#### Aggregation auf Cluster per Worldwide 
+# (A) Current day 
+
+q = """select
+      aa.cluster_NM, 
+      aa.cntr_reg,
+      aa.pop_reg,
+      bb.cntr_regt,
+      bb.pop_regt,
+      bb.ma7d_regt,
+      bb.inced_regt
+     from 
+      (SELECT 
+         a.cluster_NM, 
+         sum(a.cnt) as cntr_reg,
+         sum(a.population) as pop_reg
+        FROM df a 
+       group by a.cluster_NM) aa
+      
+      inner join 
+      
+      (select 
+        sum(b.cnt) as cntr_regt, 
+        sum(b.population) as pop_regt,
+        sum(b.ma7d) as ma7d_regt,
+        sum(b.ma7d)/sum(b.population)*100000 as inced_regt
+        from df b
+       ) bb
+      on 1
+          
+      order by aa.cluster_NM;"""
+
+df_aggww = pysqldf(q)
+
+#print(df_aggww)
+df_aggww ['pctcntr'] = df_aggww ['cntr_reg']/df_aggww ['cntr_regt']
+df_aggww ['pctpop'] = df_aggww ['pop_reg']/df_aggww ['pop_regt']
+#print(df_aggww)
+
+# (B) 7 days before current day 
+
+q = """select
+      aa.clusterp7_NM, 
+      aa.cntrp7_reg,
+      aa.popp7_reg,
+      bb.cntrp7_regt,
+      bb.popp7_regt,
+      bb.ma7dp7_regt,
+      bb.incedp7_regt
+     from 
+      (SELECT 
+         a.clusterp7_NM, 
+         sum(a.cnt) as cntrp7_reg,
+         sum(a.population) as popp7_reg
+        FROM df a 
+       group by a.clusterp7_NM) aa
+      
+      inner join 
+      
+      (select 
+        sum(b.cnt) as cntrp7_regt, 
+        sum(b.population) as popp7_regt,
+        sum(b.ma7dp7) as ma7dp7_regt,
+        sum(b.ma7dp7)/sum(b.population)*100000 as incedp7_regt
+        from df b
+       ) bb
+      on 1
+          
+      order by aa.clusterp7_NM;"""
+
+df_aggwwp7 = pysqldf(q)
+
+#print(df_aggww)
+df_aggwwp7 ['pctcntrp7'] = df_aggwwp7 ['cntrp7_reg']/df_aggwwp7 ['cntrp7_regt']
+df_aggwwp7 ['pctpopp7'] = df_aggwwp7 ['popp7_reg']/df_aggwwp7 ['popp7_regt']
+#print(df_aggwwp7)
+
+#### Union Region and Worldwide for Cluster C5 
+
+# (A) Current day 
+q = """select
+      'WW' as Region_GRP,
+      a.pctcntr as pctcntr_C5,
+      a.pctpop as pctpop_C5,
+      a.inced_regt as inced,
+      a.pop_regt as popul,
+      a.ma7d_regt as ma7d_nc
+            
+     from df_aggww a where a.cluster_nm = 'C5'
+     
+     union 
+     
+     select
+     b.Region_GRP,
+     b.pctcntr as pctcntr_C5,
+     b.pctpop as pctpop_C5,
+     b.inced_regt as inced,
+     b.pop_regt as popul,
+     b.ma7d_regt as ma7d_nc
+      
+     from df_aggreg b where b.cluster_nm = 'C5'
+     ;"""
+
+df_agg = pysqldf(q) 
+
+q = """select
+      case when Region_GRP = 'AFNO' then 'Africa/Middle East'
+           when Region_GRP = 'AP' then 'Asia Pacific'
+           when Region_GRP = 'EU' then 'Europe'
+           when Region_GRP = 'NASA' then 'Americas'
+           when Region_GRP = 'WW' then 'World'
+           else 'XXXX' end as Region,
+      pctcntr_C5 as Pct_Countries_C5,
+      pctpop_C5 as Pct_Population_C5,
+      inced as Incedent_rate ,
+      popul as Population,
+      ma7d_nc as New_Infections_7davg
+      from df_agg
+     ;"""
+
+df_agg = pysqldf(q) 
+
+# (B) 7 days before current day 
+
+q = """select
+      'WW' as Region_GRP,
+      a.pctcntrp7 as pctcntrp7_C5,
+      a.pctpopp7 as pctpopp7_C5,
+      a.incedp7_regt as incedp7,
+      a.popp7_regt as populp7,
+      a.ma7dp7_regt as ma7dp7_nc
+            
+     from df_aggwwp7 a where a.clusterp7_nm = 'C5'
+     
+     union 
+     
+     select
+     b.Region_GRP,
+     b.pctcntrp7 as pctcntrp7_C5,
+     b.pctpopp7 as pctpopp7_C5,
+     b.incedp7_regt as incedp7,
+     b.popp7_regt as populp7,
+     b.ma7dp7_regt as ma7dp7_nc
+      
+     from df_aggregp7 b where b.clusterp7_nm = 'C5'
+     ;"""
+
+df_aggp7 = pysqldf(q) 
+
+q = """select
+      case when Region_GRP = 'AFNO' then 'Africa/Middle East'
+           when Region_GRP = 'AP' then 'Asia Pacific'
+           when Region_GRP = 'EU' then 'Europe'
+           when Region_GRP = 'NASA' then 'Americas'
+           when Region_GRP = 'WW' then 'World'
+           else 'XXXX' end as Region,
+      pctcntrp7_C5 as Pct_Countriesp7_C5,
+      pctpopp7_C5 as Pct_Populationp7_C5,
+      incedp7 as Incedentp7_rate ,
+      populp7 as Populationp7,
+      ma7dp7_nc as New_Infectionsp7_7davg
+      from df_aggp7
+     ;"""
+
+df_aggp7 = pysqldf(q) 
+#print(df_aggp7)
+
+
+##### Merge (A) current day with (B) 7 days before 
+
+q = """select
+      a.Region,
+      a.Pct_Countries_C5,
+      a.Pct_Countries_C5 - b.Pct_Countriesp7_C5 as Pct_Countries_C5_dif,
+      a.Pct_Population_C5,
+      a.Pct_Population_C5 - b.Pct_Populationp7_C5 as Pct_Population_C5_dif,
+      a.Incedent_rate,
+      a.Incedent_rate - b.Incedentp7_rate as Incedent_rate_dif,
+      a.New_Infections_7davg,
+      a.New_Infections_7davg - b.New_Infectionsp7_7davg as New_Infections_7davg_dif,
+      a.Population
+      from df_agg a inner join df_aggp7 b
+      on a.Region = b.Region
+     ;"""
+
+df_agg_fin = pysqldf(q) 
+
+df_agg_fin.to_excel(locpath1+"covid_ana_day_agg.xlsx", sheet_name='Tabelle1')
+```
+
+
+
+
+
+
+#### 3b - Web Application
 
 ### 4 - From local to cloud
