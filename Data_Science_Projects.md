@@ -315,7 +315,11 @@ for i in range(rows):
        page.save(jpeg_file, 'JPEG')
 ```
 
+The pdf or jpg output of such (moving average) devlopment plot (e.g. for Germany) would look as follows:
+![Desc1](Trend_DE.jpg)
 
+
+xxxx
 
 ```
 # (7) Calculation of covid scan and print into pdf
