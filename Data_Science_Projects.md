@@ -431,7 +431,7 @@ ploti('All_Countries')
 ```
 
 The pdf or jpg output of such an overview plot (e.g. for all countries world wide) would look as follows:
-![Overview Example](covid_scan_All_Countries_2020-10-04.jpg)
+![Overview Example](covid_scan_All_Countries_2020-10-08.jpg)
 
 
 ### 4 - From local to cloud
