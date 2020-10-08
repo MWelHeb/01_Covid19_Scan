@@ -47,7 +47,7 @@ The installation of such packages (e.g. pandas, numpy, etc.) is done very easily
 - pip install Datetime
 - ...
 ``` 
-Once such different Python packages (e.g. pandas, numpy, etc.) have beeen installed, you can easily import them right at the beginning of your programm
+Once such different Python packages (e.g. pandas, numpy, etc.) have beeen installed, you can easily import them right at the beginning of your programm. Moreover I'm defining some local paths which will be used later on within the program.
 ```
 # (0) Import various packages 
 import pandas as pd
@@ -63,6 +63,10 @@ register_matplotlib_converters()
 import sqlite3
 import pandasql
 from pandasql import sqldf
+
+# Define local or remote paths for later
+locpath0 = "/home/ubuntu/00_stammdaten/"
+locpath1 = "/home/ubuntu/01_covid_scan/01_data/"
 ```
 After the packages have been imported you are ready to start processing the data. Following command will extract you the respective COVID19 data (in my case only the confirmed Covid19 cases) into a pandas dataframe:
 ```
@@ -262,7 +266,7 @@ confirmed_cntpselday1 = confirmed_cntpselday.loc[:,[ 'Region_CD', 'Region_NM', '
 confirmed_cntpselday1.to_excel(locpath1+"covid_ana_day1.xlsx", sheet_name='Tabelle1')
 ```
 
-
+In a next step I'm creating plots on the (moving average) development of new Covid19 infections for each country and storing them into pdf files which have a name that allows to identify the country (based on the two letter code of the country) to which the pdf files belongs. In order to do this step repeatingly (i.e. for every country) I use/define a Python function which is then call several times (corresponding to the amount of countries).
 
 ```
 # (6) Plotting the moving average of new Covid19 infections for each country into a pdf
@@ -297,6 +301,19 @@ for i in range(rows):
     movavganalysis(confirmed_cntpselday.iloc[i,3],confirmed_cntpselday.iloc[i,2])
 ```
 
+As a short excurse, below there is a short code example on how to convert the pdf files (for each and every country) from above into e.g. jpg files. At the beginning I thought of a use case where I thought I would need this step.
+
+```
+# convert pdf into jpg 
+from pdf2image import convert_from_path
+
+for i in range(rows):
+    pdf_file = locpath1+"trend_"+confirmed_cntpselday.iloc[i,3]+".pdf"
+    pages = convert_from_path(pdf_file, 500)
+    jpeg_file = locpath1+"trend_"+confirmed_cntpselday.iloc[i,3]+".jpg"
+    for page in pages:
+       page.save(jpeg_file, 'JPEG')
+```
 
 
 
