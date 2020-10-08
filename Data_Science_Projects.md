@@ -31,6 +31,8 @@ In the following I will describe the various steps of the data analysis which ha
 - [Data_Preparation_(01__run_covid_sv_1.py)](01_run_covid_sv_1.py)
 - [Web_Application_(02_web_covid_sv_1.py)](02_web_covid_sv_1.py)
 
+##### 3a - Data Preparation
+
 The first script is focussing on preprocessing the data and doing the necessary calculations for the analysis. After this has been done the preprocessed data is than being stored in some Excel files. The second script reads/opens this preprocessed data and than focuses in particular on displaying the results to the enduser. 
 
 I will start of with explaining the first script. Every data analysis starts of with finding/getting an appropriate data source to be analyzed. In my case basically in a first step a Google search directed me to the GitHub Data Source: D2019 Novel Coronavirus COVID-19 (2019-nCoV) Data Repository by Johns Hopkins CSSE. 
@@ -259,6 +261,43 @@ confirmed_cntpselday1 = confirmed_cntpselday.loc[:,[ 'Region_CD', 'Region_NM', '
                                                      'clusterp7', 'clusterdev']]            
 confirmed_cntpselday1.to_excel(locpath1+"covid_ana_day1.xlsx", sheet_name='Tabelle1')
 ```
+
+
+
+```
+# (6) Plotting the moving average of new Covid19 infections for each country into a pdf
+confirmed_cntpsel1 = confirmed_cntpsel1.sort_values(['Rank_Pop', 'datum'], ascending=[True, True])
+
+def movavganalysis(cntrysel,cntrynam):
+    cnsel = confirmed_cntpsel1['Cntry_CD'] == cntrysel
+    dat_ts = confirmed_cntpsel1[cnsel]
+    dat_ts = dat_ts.set_index('datum')
+    dir = locpath1+"trend_"+cntrysel+".pdf"
+    with PdfPages(dir) as pdf:
+        fig, ax = plt.subplots()
+        l1, = ax.plot(dat_ts.index, dat_ts.confi_new, linewidth=0.3, label='new cases')
+        l2, = ax.plot(dat_ts.index, dat_ts.ma3d, linewidth=0.3, label='3daysavg')
+        l3, = ax.plot(dat_ts.index, dat_ts.ma7d, linewidth=1, label='7daysavg')
+        l4, = ax.plot(dat_ts.index, dat_ts.ma14d, linewidth=1, label='14daysavg')
+        l5, = ax.plot(dat_ts.index, dat_ts.ma21d, linewidth=1, label='21daysavg')
+        plt.legend(handles=[l1, l2, l3, l4, l5])
+        fig.autofmt_xdate()
+        ax.fmt_xdata = mdates.DateFormatter('%Y-%m-%d')
+        #format the ticks
+        plt.grid(True)
+        plt.axis('tight')
+        #plt.show()
+        plt.title(cntrysel + '(' + cntrynam + ')' + ': New Covid-19 Cases up to: ' + datetime.today().strftime('%Y-%m-%d'))
+        #plt.ylabel('Cases')
+        pdf.savefig()
+        plt.close()
+      
+rows, cols = confirmed_cntpselday.shape
+for i in range(rows):
+    movavganalysis(confirmed_cntpselday.iloc[i,3],confirmed_cntpselday.iloc[i,2])
+```
+
+
 
 
 #### 4 - From local to cloud
