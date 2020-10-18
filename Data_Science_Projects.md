@@ -745,11 +745,9 @@ df_agg_fin = pysqldf(q)
 df_agg_fin.to_excel(locpath1+"covid_ana_day_agg.xlsx", sheet_name='Tabelle1')
 ```
 
-
-
-
-
-
 #### 3b - Web Application
+
+After much work has been done with regards to data preperation and analysis a key topic for me is always the aspect of presenting the results and conclusions to the audience or the project sponsor. Finally I'm interested in some statistics, e.g. the share of countries/population in each cluster and the corresponing development. For that purpose had to do some data manipulation for which I used SQL which is in Pyhton available in a module pandasql.
+
 
 ### 4 - From local to cloud
