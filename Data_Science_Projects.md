@@ -747,7 +747,14 @@ df_agg_fin.to_excel(locpath1+"covid_ana_day_agg.xlsx", sheet_name='Tabelle1')
 
 #### 3b - Web Application
 
-After much work has been done with regards to data preperation and analysis a key topic for me is always the aspect of presenting the results and conclusions to the audience or the project sponsor. Obviously in many cases analysis results are presented by means of setting up a respective power point deck which contains the key take aways and main implications. However such an approach is very "static" and does not allow e.g. to interactively demonstrate analysis results regarding questions which come up and might be required during the presentation/discussion. A far better way to present results would be to use a BI application that supports visualization of results/analysis in a very easy way via a web application (e.g. such as tools like Tableau, Cognos, etc. do). When searching for something comparable with the Python Ecosystem I quickly was confronted with [Streamlit](https://www.streamlit.io/). Streamlit declares itself to provide "The fastest way to build and share data apps" and that was actually what I was looking for ;-). So I started to deeper dig into this topic.    
+After much work has been done with regards to data preperation and analysis a key topic for me is always the aspect of presenting the results and conclusions to the audience or the project sponsor. Obviously in many cases analysis results are presented by means of setting up a respective power point deck which contains the key take aways and main implications. However such an approach is very "static" and does not allow e.g. to interactively demonstrate analysis results regarding questions which come up and might be required during the presentation/discussion. A far better way to present results would be to use a BI application that supports visualization of results/analysis in a very easy way via a web application (e.g. such as tools like Tableau, Cognos, etc. do). When searching for something comparable with the Python Ecosystem I quickly was confronted with Streamlit. Streamlit declares itself to provide "The fastest way to build and share data apps" and that was actually what I was looking for ;-). So I started to dig deeper into this topic.    
+
+Basically the documentation of [Streamlit](https://www.streamlit.io/) offers a very nice roadmap on how to start using this module. Likewise to other packages installation  is done very easily via the package manager pip using the following commands: 
+
+```
+pip install streamlit
+``` 
+With 
 
 
 ### 4 - From local to cloud
