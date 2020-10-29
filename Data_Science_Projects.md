@@ -8,7 +8,7 @@
 #### 3b - Web Application
 ### 4 - From local to cloud
 
-### ----------------------------------------------------------------------------------------------------------------------
+### -----------------------------------------------------------------------------------------------------------------------------
 ### 1 - Starting point - to have a (data science) question. 
 
 In my case - at the beginning of the covid crisis - I was very much interested in having an overview on the status of covid19 infections in the various countries at each point in time. Working in the airline industry I was particularly interested in so-called online countries, i.e. countries which had formerly, i.e. before the covid19 breakout, been online connected by the airline under consideration. Idea was to early identify those countries which had covid19 "under control", because these would be the first countries, where airline travel demand would pick up again. 
@@ -857,7 +857,7 @@ st.pyplot(fig1)
 
 Below you see a screen shot on how this code turns out in the browser:
 
-![Streamlit_Screenshot](Streamlit_scrsh1.JPG)
+![Streamlit_Screenshot1](Streamlit_scrsh1.JPG)
 
 The next section aims to generate the "Covid Scan Curves" mentioned above, i.e. the idea was to somehow scan the typical (i.e. "bell shaped") covid curve of new infections for each and every country and then to position each country on such a "typical generic bell shaped covid curve" in order to get an overview on one page. Apart from a worldwide scan four regional scans are being conducted for "Asia Pacific", "Africa/Middle East", "Americas" and "Europe".
 
@@ -1042,6 +1042,10 @@ fig1 = ploti('Europe')
 
 st.pyplot(fig1)
 ```
+Below you see a screen shot on how this code turns out in the browser:
+
+![Streamlit_Screenshot2](Streamlit_scrsh2.JPG)
+
 The next coding section aims to provide some descriptive statistics in order to compare the regions amongst each other. The coding is rather straight forward. Preprocessed data is retrieved from an Excel sheet, then some columns are renamed and the Streamlit command st.dataframe displays the desired output dataframe.
 
 ```
@@ -1081,16 +1085,16 @@ st.dataframe(df_agg_fin.style.format({'Cntry_C5': "{:.1%}", 'Cntry_C5_dif': "{:.
                                       'Population': "{:0<1.0f}"
                                       }))
 ```
+Here you see a screen shot on how this code turns out in the browser:
+
+![Streamlit_Screenshot3](Streamlit_scrsh3.JPG)
 
 
+The following coding section looks at a graphical presentation and comparison of the cluster distribution across all four regions thereby looking at two dimensions: (1) the countries, i.e. how many countries fall into each cluster, (2) how much population falls into each cluster.  
 
 ```
 
-#(4) Graphische Darstellung der Clusterverteilung der 3 Regionen    
-###### Graphische Darstellung der Clusterverteilung der 3 Regionen #################
-#df_aggreg.to_excel(locpath1+"covid_ana_day_agg_cluster.xlsx", sheet_name='Tabelle1')
-
-    
+#(4) Graphical representation of the cluster distribution across all 4 regions
 st.subheader('And now the distribution of the 5 cluster for the four regions.')    
     
 df_aggreg = pd.read_excel(locpath1+"covid_ana_day_agg_cluster.xlsx", keep_default_na=False)
@@ -1109,7 +1113,6 @@ df_aggreg['pctcntr1'] = df_aggreg.pctcntr.combine_first(df_aggreg.pctcntr0)
 df_aggreg = df_aggreg.drop(columns=['pctpop', 'pctcntr', 'pctpop0', 'pctcntr0'])
 df_aggreg = df_aggreg.rename(columns={"pctpop1": "pctpop", "pctcntr1": "pctcntr"})
 
-#print(df_aggreg)
 df_aggregAFNO = df_aggreg[df_aggreg['Region_GRP'].isin(['AFNO'])]
 df_aggregAP = df_aggreg[df_aggreg['Region_GRP'].isin(['AP'])]
 df_aggregEU = df_aggreg[df_aggreg['Region_GRP'].isin(['EU'])]
@@ -1122,7 +1125,6 @@ x = np.arange(len(labels))  # the label locations
 width = 0.15  # the width of the bars
 
 fig, ax = plt.subplots()
-##rects1 = ax.bar(x - width/2, men_means, width, label='Men')
 rects1 = ax.bar(x - width/1, df_aggregAFNO['pctpop'], width, label='AFNO')
 rects2 = ax.bar(x, df_aggregAP['pctpop'], width, label='AP')
 rects3 = ax.bar(x + width/1, df_aggregEU['pctpop'], width, label='EU')
@@ -1136,11 +1138,9 @@ ax.legend()
 
 fig.tight_layout()
 st.pyplot(fig)
-#plt.show()
 
 
 fig, ax = plt.subplots()
-##rects1 = ax.bar(x - width/2, men_means, width, label='Men')
 rects1 = ax.bar(x - width/1, df_aggregAFNO['pctcntr'], width, label='AFNO')
 rects2 = ax.bar(x , df_aggregAP['pctcntr'], width, label='AP')
 rects3 = ax.bar(x + width/1, df_aggregEU['pctcntr'], width, label='EU')
@@ -1155,6 +1155,14 @@ ax.legend()
 fig.tight_layout()
 st.pyplot(fig)
 ```
+This screen shot shows how this code turns out in the browser:
+
+![Streamlit_Screenshot4](Streamlit_scrsh4.JPG)
+
+The next coding section aims to provide some descriptive statistics in order to compare the regions amongst each other. The coding is rather straight forward. Preprocessed data is retrieved from an Excel sheet, then some columns are renamed and the Streamlit command st.dataframe displays the desired output dataframe.
+
+
+
 
 
 ### 4 - From local to cloud
