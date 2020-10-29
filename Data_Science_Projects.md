@@ -1,5 +1,3 @@
-empirical_eyes
-
 # Publishing a data science project
 
 ## I – ANALYZING THE COVID 19 INFECTION DEVELOPMENT
@@ -787,7 +785,7 @@ import geopandas as gpd
 locpath0 = "/home/ubuntu/00_stammdaten/"
 locpath1 = "/home/ubuntu/01_covid_scan/01_data/"
 ```
-The next piece contains code for the first App which allows the user to select a certain country and to receive a corresponding graph which displays the country's histrocical development of new infections on a daily base and considers different moving averages (e.g. 3, 7, 14 and 21 days). Basically the script starts of with a title and and a subheader. Then the script loads the preprocessed data which is needed to calculate and display the curve of new infections and corresponding moving averages. Pls. note that in this context we use a @st.cache function which substantially increases the performance/speed of user requests by storing information/results into a local cash if possible. For further details on how to use this @st.cache function and possible limitations pls. refer to the [Streamlit](https://www.streamlit.io/) documentation. 
+The next piece of code relates to the first App which allows the user to select a certain country and to receive a corresponding graph which displays the country's historical development of new infections on a daily base and considers different moving averages (e.g. 3, 7, 14 and 21 days). Basically the script starts of with a title and a subheader. Then the script loads the preprocessed data (stored in an Excel sheet) which is needed to calculate and display the curve of new infections and corresponding moving averages. Pls. note that in this context we use a @st.cache function which substantially increases the performance/speed of user requests by storing information/results into a local cash if possible. For further details on how to use this @st.cache function and possible limitations pls. refer to the [Streamlit](https://www.streamlit.io/) documentation. Additionally for the country select box a list of all countries is extracted from another preprocessed Excel sheet. Finally a python function "movavganalysis" is defined which calculates for any selected country the various moving averages of new infections and plots them together with the daily new infections in a single graph. The Streamlit command st.pyplot() then displays this graph on the webpage. 
 
 ```
 #(1) App which allows interactive selection of covid development for a specific country
@@ -853,6 +851,7 @@ st.pyplot(fig1)
 Below you see a screen shot on how this code turns out in the browser:
 
 ![Streamlit_Screenshot](Streamlit_scrsh1.JPG)
+
 
 
 
