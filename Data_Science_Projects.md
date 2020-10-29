@@ -1159,8 +1159,81 @@ This screen shot shows how this code turns out in the browser:
 
 ![Streamlit_Screenshot4](Streamlit_scrsh4.JPG)
 
-The next coding section aims to provide some descriptive statistics in order to compare the regions amongst each other. The coding is rather straight forward. Preprocessed data is retrieved from an Excel sheet, then some columns are renamed and the Streamlit command st.dataframe displays the desired output dataframe.
+The last section aimes to construct a geographical map which displays the current Covid19 situation by means of coloring countries differently. For that purpose a geodata data set is required providing geojson polygons for all the world's countries. You can download the shapefiles that we used from [here](https://hub.arcgis.com/datasets/a21fdb46d23e4ef896f31475217cbb08_1). To be able to join the shapefile and the covid data, we need to align information in both files. Unfortunately, this is a rather manual process as we need to make sure that the country names match between the data and the shapefiles. Once this is done the package folium provides an easy way to visualize data that’s been manipulated in Python on an interactive leaflet map.
 
+```
+#(5) Geographical representation of differnt covid statistics 
+st.subheader('Moreover here are some world maps describing the current Covid19 situation.')
+
+country_shapes = locpath0+"Worldgeo.geojson"
+
+df_day = pd.read_excel(locpath1+"covid_ana_day1.xlsx", keep_default_na=False)
+df_day.loc[(df_day['cluster'] == 'q0') | (df_day['cluster'] == 'q1') | (df_day['cluster'] == 'q2') | (df_day['cluster'] == 'q3'), 'clustergrp'] = 2
+df_day.loc[(df_day['cluster'] == 'q4'), 'clustergrp'] = 1
+df_day.loc[(df_day['cluster'] == 'q5'), 'clustergrp'] = 0
+df_day['incident7d'] = df_day['ma7d']/df_day['population']*100000
+df_day['incident7d_log'] = np.log10(df_day['incident7d'])
+
+values = {'incident7d': 0, 'incident7d_log': 0}
+df_day = df_day.fillna(value=values)
+df_day['incident7d'] = df_day['incident7d'].replace([np.inf, -np.inf], 0)
+df_day['incident7d_log'] = df_day['incident7d_log'].replace([np.inf, -np.inf], 0)
+
+df_day['Country/Region']= df_day['Country/Region'].str.replace("Belarus", "Byelarus")
+df_day['Country/Region']= df_day['Country/Region'].str.replace("Burma", "Myanmar (Burma)")
+df_day['Country/Region']= df_day['Country/Region'].str.replace("Congo (Kinshasa)", "Congo")
+df_day['Country/Region']= df_day['Country/Region'].str.replace("Czechia", "Czech Republic")
+df_day['Country/Region']= df_day['Country/Region'].str.replace("Korea, South", "South Korea")
+df_day['Country/Region']= df_day['Country/Region'].str.replace("North Macedonia", "Macedonia")
+df_day['Country/Region']= df_day['Country/Region'].str.replace("Saint Kitts and Nevis", "St. Kitts and Nevis")
+df_day['Country/Region']= df_day['Country/Region'].str.replace("Saint Lucia", "St. Lucia")
+df_day['Country/Region']= df_day['Country/Region'].str.replace("Saint Vincent and the Grenadines", "St. Vincent and the Grenadines")
+df_day['Country/Region']= df_day['Country/Region'].str.replace("Tanzania", "Tanzania, United Republic of")
+df_day['Country/Region']= df_day['Country/Region'].str.replace("West Bank and Gaza", "West Bank")
+
+df_day = df_day.loc[:,['Country/Region' ,'clustergrp' ,'incident7d', 'incident7d_log']]     
+
+st.subheader('Wold map with 3 colors for 3 Cluster: (1): Cluster0-3, (2): Cluster4, (3): Cluster5')
+#Adding the Choropleth layer onto our base map
+m = folium.Map(min_zoom=1.45, max_bounds=True, tiles='cartodbpositron')
+folium.Choropleth(
+    #The GeoJSON data to represent the world country
+    geo_data=country_shapes,
+    name='Choropleth COVID-19 Cluster',
+    data=df_day,
+    #The column aceppting list with 2 value; The country name and  the numerical value
+    columns=['Country/Region','clustergrp'],
+    key_on='feature.properties.CNTRY_NAME',
+    fill_color='BuPu',
+    fill_opacity=0.7,
+    line_opacity=0.5,
+    nan_fill_color='white'
+).add_to(m)
+
+folium_static(m)
+
+st.subheader('Wold map with color describing the Log-Incidents for each Country')
+
+m = folium.Map(min_zoom=1.45, max_bounds=True, tiles='cartodbpositron')
+folium.Choropleth(
+    #The GeoJSON data to represent the world country
+    geo_data=country_shapes,
+    name='Choropleth COVID-19 Cluster',
+    data=df_day,
+    #The column aceppting list with 2 value; The country name and  the numerical value
+    columns=['Country/Region','incident7d_log'],
+    key_on='feature.properties.CNTRY_NAME',
+    fill_color='BuPu',
+    fill_opacity=0.7,
+    line_opacity=0.5,
+    nan_fill_color='white'
+).add_to(m)
+
+folium_static(m)
+```
+Here is a screen shot that shows how this code turns out in the browser:
+
+![Streamlit_Screenshot5](Streamlit_scrsh5.JPG)
 
 
 
