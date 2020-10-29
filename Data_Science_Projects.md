@@ -787,12 +787,12 @@ import geopandas as gpd
 locpath0 = "/home/ubuntu/00_stammdaten/"
 locpath1 = "/home/ubuntu/01_covid_scan/01_data/"
 ```
-The next piece contains code for the first App which allows the user to select a certain country and to receive a corresponding graph for the selected country displaying the histrocical development of new infections on a daily base and considering different moving averages (e.g. 3, 7, 14 and 21 days).
+The next piece contains code for the first App which allows the user to select a certain country and to receive a corresponding graph which displays the country's histrocical development of new infections on a daily base and considers different moving averages (e.g. 3, 7, 14 and 21 days). Basically the script starts of with a title and and a subheader. Then the script loads the preprocessed data which is needed to calculate and display the curve of new infections and corresponding moving averages. Pls. note that in this context we use a @st.cache function which substantially increases the performance/speed of user requests by storing information/results into a local cash if possible. For further details on how to use this @st.cache function and possible limitations pls. refer to the [Streamlit](https://www.streamlit.io/) documentation. 
 
 ```
 #(1) App which allows interactive selection of covid development for a specific country
-td = date.today().strftime("%d/%m/%Y")
 
+td = date.today().strftime("%d/%m/%Y")
 st.title('Covid19 Scan'+' - '+td)
 st.subheader('Analysis of the historical development of new Covid19 infections for all worldwide countries')
 
@@ -814,7 +814,6 @@ selectbox_1 = st.selectbox(
     'Choose a country?',
     (selcntr_str))
 
-#@st.cache
 def movavganalysis(cntrynam):
 
     cnsel = fulldat1['Country/Region'] == cntrynam
