@@ -10,7 +10,7 @@
 #### 3b - Web Application
 ### 4 - From local to cloud
 
-###
+### -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ### 1 - Starting point - to have a (data science) question. 
 
 In my case - at the beginning of the covid crisis - I was very much interested in having an overview on the status of covid19 infections in the various countries at each point in time. Working in the airline industry I was particularly interested in so-called online countries, i.e. countries which had formerly, i.e. before the covid19 breakout, been online connected by the airline under consideration. Idea was to early identify those countries which had covid19 "under control", because these would be the first countries, where airline travel demand would pick up again. 
