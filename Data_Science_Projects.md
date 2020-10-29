@@ -754,7 +754,103 @@ Basically the documentation of [Streamlit](https://www.streamlit.io/) offers a v
 ```
 pip install streamlit
 ``` 
-With 
+Now in order to run your first Streamlit App you need to open a new Python file/script, import Streamlit at the top of the script (like you import other packages such as pandas etc.), and write some Python code. In order to run your app you need to open a command window and type: 
+
+```
+streamlit run [Python-filename]
+```
+That’s it! In the next few seconds your Streamlit App will open in a new tab in your default browser.
+
+Now in my case I had the intention to create a Streamlit App which allows to display every day the latest figures of the scan of the Covid Curve (as described above). Moreover I was interested in also gving the user the possibilty to interactively select and dive into the development of a specific country. Finally I was curious to learn a little bit about geographical maps and how to display different covid statitics in such a geographical map context. So let's get started with my program. In a first step I import various packages which will be needed and define some local path:
+
+```
+#(0) Import packages and define local path
+import streamlit as st
+from streamlit_folium import folium_static
+import pandas as pd
+import numpy as np
+import datetime
+from datetime import date, datetime, timedelta
+import requests
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_pdf import PdfPages
+import matplotlib.dates as mdates
+from pandas.plotting import register_matplotlib_converters
+register_matplotlib_converters()
+from pdf2image import convert_from_path
+from PIL import Image
+import branca.colormap as cm
+import folium
+import geopandas as gpd
+
+# Define local or remote paths for later
+locpath0 = "/home/ubuntu/00_stammdaten/"
+locpath1 = "/home/ubuntu/01_covid_scan/01_data/"
+```
+The next piece contains code for the first App, which allow the user to select a certain country and receive a graph of the histrocical development of new infections on a daily base and considering different moving averages (e.g. 3, 7, 14 and 21 days).
+
+```
+#(1) App which allows interactive selection of covid development for a specific country
+td = date.today().strftime("%d/%m/%Y")
+
+st.title('Covid19 Scan'+' - '+td)
+st.subheader('Analysis of the historical development of new Covid19 infections for all worldwide countries')
+
+@st.cache(allow_output_mutation=True, ttl=60*60*24)
+def load_data():
+    #fulldat = pd.read_excel(locpath1+"covid_ana_tsa1.xlsx", keep_default_na=False, error_bad_lines=False)
+    fulldat = pd.read_excel(locpath1+"covid_ana_tsa1.xlsx", keep_default_na=False)
+    fulldat = fulldat.sort_values(['Rank_Pop', 'datum'], ascending=[True, True])
+    return fulldat
+
+fulldat1 = load_data()
+
+selcntr = pd.read_excel(locpath1+"covid_ana_day1.xlsx", keep_default_na=False)
+selcntr = selcntr.loc[:,['Country/Region']]
+selcntr = selcntr.sort_values(['Country/Region'], ascending=[True])
+selcntr_str = selcntr['Country/Region'].astype(str).values.tolist()
+
+selectbox_1 = st.selectbox(
+    'Choose a country?',
+    (selcntr_str))
+
+#@st.cache
+def movavganalysis(cntrynam):
+
+    cnsel = fulldat1['Country/Region'] == cntrynam
+    #cnsel = cnsel.sort_values(['datum'], ascending=[True])
+    dat_ts = fulldat1[cnsel]
+    dat_ts = dat_ts.set_index('datum')
+
+    #20 days to represent the 22 trading days in a month
+    dat_ts['ma3d'] = dat_ts['confi_new'].rolling(3).mean()
+    dat_ts['ma7d'] = dat_ts['confi_new'].rolling(7).mean()
+    dat_ts['ma14d'] = dat_ts['confi_new'].rolling(14).mean()
+    dat_ts['ma21d'] = dat_ts['confi_new'].rolling(21).mean()
+    
+    
+    fig, ax = plt.subplots()
+    l1, = ax.plot(dat_ts.index, dat_ts.confi_new, linewidth=0.3, label='new cases')
+    l2, = ax.plot(dat_ts.index, dat_ts.ma3d, linewidth=0.3, label='3daysavg')
+    l3, = ax.plot(dat_ts.index, dat_ts.ma7d, linewidth=1, label='7daysavg')
+    l4, = ax.plot(dat_ts.index, dat_ts.ma14d, linewidth=1, label='14daysavg')
+    l5, = ax.plot(dat_ts.index, dat_ts.ma21d, linewidth=1, label='21daysavg')
+    plt.legend(handles=[l1, l2, l3, l4, l5])
+    fig.autofmt_xdate()
+    ax.fmt_xdata = mdates.DateFormatter('%Y-%m-%d')
+    #format the ticks
+    plt.grid(True)
+    plt.axis('tight')
+    #plt.show()
+    plt.title(cntrynam + ': New Covid-19 Cases up to: ' + datetime.today().strftime('%Y-%m-%d'))
+    #plt.ylabel('Cases')
+    #plt.close()
+    return fig
+
+fig1 = movavganalysis(selectbox_1)
+st.pyplot(fig1)
+```
+
 
 
 ### 4 - From local to cloud
