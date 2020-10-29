@@ -787,7 +787,7 @@ import geopandas as gpd
 locpath0 = "/home/ubuntu/00_stammdaten/"
 locpath1 = "/home/ubuntu/01_covid_scan/01_data/"
 ```
-The next piece contains code for the first App, which allow the user to select a certain country and receive a graph of the histrocical development of new infections on a daily base and considering different moving averages (e.g. 3, 7, 14 and 21 days).
+The next piece contains code for the first App which allows the user to select a certain country and to receive a corresponding graph for the selected country displaying the histrocical development of new infections on a daily base and considering different moving averages (e.g. 3, 7, 14 and 21 days).
 
 ```
 #(1) App which allows interactive selection of covid development for a specific country
@@ -850,6 +850,10 @@ def movavganalysis(cntrynam):
 fig1 = movavganalysis(selectbox_1)
 st.pyplot(fig1)
 ```
+
+Below you see a screen shot on how this code turns out in the browser:
+
+![Streamlit_Screenshot](Streamlit_scrsh1.JPG)
 
 
 
