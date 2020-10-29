@@ -2,7 +2,7 @@
 
 ## I – ANALYZING THE COVID 19 INFECTION DEVELOPMENT
 
-# CONTENT
+### CONTENT
 ### 1 - Starting point - to have a (data science) question. 
 ### 2 - Data science software
 ### 3 - Data analysis
