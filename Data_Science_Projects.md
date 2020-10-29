@@ -852,6 +852,191 @@ Below you see a screen shot on how this code turns out in the browser:
 
 ![Streamlit_Screenshot](Streamlit_scrsh1.JPG)
 
+The next section aims to generate the "Covid Scan Curves" mentioned above, i.e. the idea was to somehow scan the typical (i.e. "bell shaped") covid curve of new infections for each and every country and then to position each country on such a "typical generic bell shaped covid curve" in order to get an overview on one page. Apart from a worldwide scan four regional scans are being conducted for "Asia Pacific", "Africa/Middle East", "Americas" and "Europe".
+
+```
+#(2) Display Covid Curve Scan (Overall and different Regions)
+st.subheader('In order to get a quick overview on the Covid19 status for all countries world wide we place each country according to its current Covid19 situation at a representativ position on the typical (i.e. bell shaped) covid curve of new infections')
+
+st.subheader('Based on the current level and historical development of new infections countries are grouped into 6 possible clusters along the typical covid curve')
+
+st.text("Cluster 0: Current cumulative Covid19 infections are < 1.000 cases""\n"
+        "Cluster 1: Increasing new daily Covid19 infections""\n"
+        "Cluster 2: Potentialy reaching the peak of new daily Covid19 infections""\n"
+        "Cluster 3: Indication of decreasing new daily Covid19 infections""\n"
+        "Cluster 4: Decreased number of new daily Covid19 infections (compared to historical peak)""\n" 
+        "Cluster 5: Low number of new daily Covid19 infections (compared to historical peak)")
+
+st.subheader("Within each cluster countries are sorted by the size of population, i.e. countries with larger population appear before countries with a smaller population. For further details pls. see below")
+
+st.subheader("Moreover the cluster dynamic is shown via color coding: (A) Countries which have shifted since last snapshot to a higher (i.e. better) cluster (e.g. C1 to C2) are in green. (B) Countries which have shifted since last snapshot to a lower (i.e. worse) cluster (e.g. C4 to C3) are in red. (C) Countries which have remained since last snapshot in the same cluster are in blue")
+
+st.subheader('')
+
+#### All Online Countries  
+df = pd.read_excel(locpath1+"covid_ana_day1.xlsx", keep_default_na=False)
+
+df.loc[(df['clusterdev'] == 1), 'clusterdevc'] = 'g'
+df.loc[(df['clusterdev'] == 0), 'clusterdevc'] = 'b'
+df.loc[(df['clusterdev'] == -1), 'clusterdevc'] = 'r'
+df = df.loc[:,['Country/Region', 'Cntry_CD', 'cluster', 'clusterdev', 'clusterdevc', 'Rank_Pop']]
+df['rnk_plot'] = df.groupby(['cluster']).cumcount()+1
+
+
+def posi(clus,xst,xincr,yst,yincr,spaln):
+    
+    df.loc[(df['cluster'] == clus) & (df['rnk_plot']<=1*spaln), 'x'] = xst + (df['rnk_plot']-1)*xincr
+    df.loc[(df['cluster'] == clus) & (df['rnk_plot']>1*spaln) & (df['rnk_plot']<=2*spaln), 'x'] = xst + (df['rnk_plot']-1*spaln-1)*xincr
+    df.loc[(df['cluster'] == clus) & (df['rnk_plot']>2*spaln) & (df['rnk_plot']<=3*spaln), 'x'] = xst + (df['rnk_plot']-2*spaln-1)*xincr
+    df.loc[(df['cluster'] == clus) & (df['rnk_plot']>3*spaln) & (df['rnk_plot']<=4*spaln), 'x'] = xst + (df['rnk_plot']-3*spaln-1)*xincr
+    df.loc[(df['cluster'] == clus) & (df['rnk_plot']>4*spaln) & (df['rnk_plot']<=5*spaln), 'x'] = xst + (df['rnk_plot']-4*spaln-1)*xincr
+    df.loc[(df['cluster'] == clus) & (df['rnk_plot']>5*spaln) & (df['rnk_plot']<=6*spaln), 'x'] = xst + (df['rnk_plot']-5*spaln-1)*xincr
+    
+    df.loc[(df['cluster'] == clus) & (df['rnk_plot']<=1*spaln), 'y'] = yst
+    df.loc[(df['cluster'] == clus) & (df['rnk_plot']>1*spaln) & (df['rnk_plot']<=2*spaln), 'y'] = yst-1*yincr
+    df.loc[(df['cluster'] == clus) & (df['rnk_plot']>2*spaln) & (df['rnk_plot']<=3*spaln), 'y'] = yst-2*yincr
+    df.loc[(df['cluster'] == clus) & (df['rnk_plot']>3*spaln) & (df['rnk_plot']<=4*spaln), 'y'] = yst-3*yincr
+    df.loc[(df['cluster'] == clus) & (df['rnk_plot']>4*spaln) & (df['rnk_plot']<=5*spaln), 'y'] = yst-4*yincr
+    df.loc[(df['cluster'] == clus) & (df['rnk_plot']>5*spaln) & (df['rnk_plot']<=6*spaln), 'y'] = yst-5*yincr
+    
+posi('q0',  -6,0.5,0.15,0.03,8)
+posi('q1',  -6,0.5,0.35,0.03,8)
+posi('q2',-1.5,0.5,0.55,0.03,6)
+posi('q3',   2,0.5,0.45,0.03,8)
+posi('q4',   2,0.5, 0.3,0.03,8)
+posi('q5',   3,0.5, 0.1,0.03,8)
+
+df = df.loc[:,['Cntry_CD', 'x', 'y','cluster','clusterdev','clusterdevc','rnk_plot']]
+   
+
+def ploti(sele):
+    fig, ax = plt.subplots()
+    fig.suptitle('Covid19 Scan for: ' + sele, fontsize=12, fontweight='bold')
+    
+    a = np.linspace(-6, 0.8, 1000)
+    ax.plot(a, 1 / np.sqrt(2*np.pi) * np.exp(-(a**2)/2), color = 'red', label='high level', linewidth=8)
+    
+    b = np.linspace(0.8, 1.8, 1000)
+    ax.plot(b, 1 / np.sqrt(2*np.pi) * np.exp(-(b**2)/2), color = 'orange', label='mid level', linewidth=8)
+    
+    c = np. linspace(1.8, 6, 1000)
+    ax.plot(c, 1 / np.sqrt(2*np.pi) * np.exp(-(c**2)/2), color = 'green', label='low level', linewidth=8)
+
+    d = np. linspace(-6, 6, 1000)
+    ax.plot(d, 1 / np.sqrt(2*np.pi) * np.exp(-(d**2)/2)+0.15, color = 'black', label='low level', linewidth=0)
+    
+    ax.axis('off')
+    
+    rows, cols = df.shape
+    for i in range(rows):
+            ax.annotate('{}'.format(df.iloc[i, 0]), xy=(df.iloc[i, 1], df.iloc[i, 2]),fontsize=7,fontname='Sans', color = df.iloc[i, 5]) 
+
+    return fig
+    
+fig1 = ploti('All Countries')
+
+st.pyplot(fig1)
+
+######### AP
+df = pd.read_excel(locpath1+"covid_ana_day1.xlsx", keep_default_na=False)
+
+df = df[(df.Region_CD == 'AP')] 
+df.loc[(df['clusterdev'] == 1), 'clusterdevc'] = 'g'
+df.loc[(df['clusterdev'] == 0), 'clusterdevc'] = 'b'
+df.loc[(df['clusterdev'] == -1), 'clusterdevc'] = 'r'
+df = df.loc[:,['Country/Region', 'Cntry_CD', 'cluster', 'clusterdev', 'clusterdevc', 'Rank_Pop']]
+df['rnk_plot'] = df.groupby(['cluster']).cumcount()+1
+
+
+posi('q0',  -6,0.5,0.15,0.03,8)
+posi('q1',  -6,0.5,0.35,0.03,8)
+posi('q2',-1.5,0.5,0.55,0.03,6)
+posi('q3',   2,0.5,0.45,0.03,8)
+posi('q4',   2,0.5, 0.3,0.03,8)
+posi('q5',   3,0.5, 0.1,0.03,8)
+
+df = df.loc[:,['Cntry_CD', 'x', 'y','cluster','clusterdev','clusterdevc','rnk_plot']]
+
+fig1 = ploti('Asia Pacific')
+
+st.pyplot(fig1)
+
+######### AF/NO
+df = pd.read_excel(locpath1+"covid_ana_day1.xlsx", keep_default_na=False)
+
+df = df[(df.Region_CD == 'AF') | (df.Region_CD == 'NO')] 
+df.loc[(df['clusterdev'] == 1), 'clusterdevc'] = 'g'
+df.loc[(df['clusterdev'] == 0), 'clusterdevc'] = 'b'
+df.loc[(df['clusterdev'] == -1), 'clusterdevc'] = 'r'
+df = df.loc[:,['Country/Region', 'Cntry_CD', 'cluster', 'clusterdev', 'clusterdevc', 'Rank_Pop']]
+df['rnk_plot'] = df.groupby(['cluster']).cumcount()+1
+
+
+posi('q0',  -6,0.5,0.15,0.03,8)
+posi('q1',  -6,0.5,0.35,0.03,8)
+posi('q2',-1.5,0.5,0.55,0.03,6)
+posi('q3',   2,0.5,0.45,0.03,8)
+posi('q4',   2,0.5, 0.3,0.03,8)
+posi('q5',   3,0.5, 0.1,0.03,8)
+
+df = df.loc[:,['Cntry_CD', 'x', 'y','cluster','clusterdev','clusterdevc','rnk_plot']]
+
+fig1 = ploti('Africa/Middle East')
+
+st.pyplot(fig1)
+
+######### NA/SA
+df = pd.read_excel(locpath1+"covid_ana_day1.xlsx", keep_default_na=False)
+#df = confirmed_cntpselday    
+
+df = df[(df.Region_CD == 'NA') | (df.Region_CD == 'SA')] 
+df.loc[(df['clusterdev'] == 1), 'clusterdevc'] = 'g'
+df.loc[(df['clusterdev'] == 0), 'clusterdevc'] = 'b'
+df.loc[(df['clusterdev'] == -1), 'clusterdevc'] = 'r'
+df = df.loc[:,['Country/Region', 'Cntry_CD', 'cluster', 'clusterdev', 'clusterdevc', 'Rank_Pop']]
+df['rnk_plot'] = df.groupby(['cluster']).cumcount()+1
+
+
+posi('q0',  -6,0.5,0.15,0.03,8)
+posi('q1',  -6,0.5,0.35,0.03,8)
+posi('q2',-1.5,0.5,0.55,0.03,6)
+posi('q3',   2,0.5,0.45,0.03,8)
+posi('q4',   2,0.5, 0.3,0.03,8)
+posi('q5',   3,0.5, 0.1,0.03,8)
+
+df = df.loc[:,['Cntry_CD', 'x', 'y','cluster','clusterdev','clusterdevc','rnk_plot']]
+
+fig1 = ploti('Americas')
+
+st.pyplot(fig1)
+
+
+######### EU
+df = pd.read_excel(locpath1+"covid_ana_day1.xlsx", keep_default_na=False)
+
+df = df[(df.Region_CD == 'EU') ] 
+df.loc[(df['clusterdev'] == 1), 'clusterdevc'] = 'g'
+df.loc[(df['clusterdev'] == 0), 'clusterdevc'] = 'b'
+df.loc[(df['clusterdev'] == -1), 'clusterdevc'] = 'r'
+df = df.loc[:,['Country/Region', 'Cntry_CD', 'cluster', 'clusterdev', 'clusterdevc', 'Rank_Pop']]
+df['rnk_plot'] = df.groupby(['cluster']).cumcount()+1
+
+
+posi('q0',  -6,0.5,0.15,0.03,8)
+posi('q1',  -6,0.5,0.35,0.03,8)
+posi('q2',-1.5,0.5,0.55,0.03,6)
+posi('q3',   2,0.5,0.45,0.03,8)
+posi('q4',   2,0.5, 0.3,0.03,8)
+posi('q5',   3,0.5, 0.1,0.03,8)
+
+df = df.loc[:,['Cntry_CD', 'x', 'y','cluster','clusterdev','clusterdevc','rnk_plot']]
+
+fig1 = ploti('Europe')
+
+st.pyplot(fig1)
+```
+
+
 
 
 
