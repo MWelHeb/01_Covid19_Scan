@@ -1236,6 +1236,12 @@ Here is a screen shot that shows how this code turns out in the browser:
 ![Streamlit_Screenshot5](Streamlit_scrsh5.JPG)
 
 
-
-
 ### 4 - From local to cloud
+
+This section deals with the topic to provide the analysis above (or any other analysis) to a broad and potentially word wide audience. For that purpose we need to shift the analysis which is currently conducted locally on my computer to a server or cloud environement. Moreover my goal was not to spend any moneny on this topic.  
+
+
+
+
+
+
