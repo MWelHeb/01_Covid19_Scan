@@ -2,6 +2,15 @@
 
 ## I – ANALYZING THE COVID 19 INFECTION DEVELOPMENT
 
+## CONTENT
+### 1 - Starting point - to have a (data science) question. 
+### 2 - Data science software
+### 3 - Data analysis
+#### 3a - Data Preparation
+#### 3b - Web Application
+### 4 - From local to cloud
+
+
 ### 1 - Starting point - to have a (data science) question. 
 
 In my case - at the beginning of the covid crisis - I was very much interested in having an overview on the status of covid19 infections in the various countries at each point in time. Working in the airline industry I was particularly interested in so-called online countries, i.e. countries which had formerly, i.e. before the covid19 breakout, been online connected by the airline under consideration. Idea was to early identify those countries which had covid19 "under control", because these would be the first countries, where airline travel demand would pick up again. 
@@ -1035,9 +1044,119 @@ fig1 = ploti('Europe')
 
 st.pyplot(fig1)
 ```
+The next coding section aims to provide some descriptive statistics in order to compare the regions amongst each other. The coding is rather straight forward. Preprocessed data is retrieved from an Excel sheet, then some columns are renamed and the Streamlit command st.dataframe displays the desired output dataframe.
+
+```
+#(3) And now some descriptive statistics in order to compare the regions
+
+st.subheader('And now some descriptive statistics in order to compare the regions.')
+ 
+st.text("For the five regions above (1) Africa/Middle East (2) Americas (3) Asia Pacific""\n""(4) Europe and (5) World following figures have been defined""\n"
+         "- Cntry_C5: Share of countries in Cluster 5 (in %)""\n"
+         "- Cntry_C5_dif: Difference to Cntry_C5 7 days before (in %p)""\n"
+         "- Pop_C5: Share of population in Cluster 5 (in %)""\n"
+         "- Pop_C5_dif: Difference to Pop_C5 7 days before (in %p)""\n"
+         "- New_Inf_7davg: 7 days average of new infections (in persons)""\n"
+         "- New_Inf_7davg_dif: Difference to New_Inf_7davg 7 days before (in persons)""\n"
+         "- Inc_rate: New_Infections_7davg/Population (in persons)""\n"
+         "- Inc_rate_dif: Difference to Inc_rate 7 days before (in persons)""\n"
+         "- Population (in persons)""\n")
+
+df_agg_fin = pd.read_excel(locpath1+"covid_ana_day_agg.xlsx", keep_default_na=False)
+
+df_agg_fin = df_agg_fin.loc[:,[ 'Region', 'Pct_Countries_C5', 'Pct_Countries_C5_dif',
+                                          'Pct_Population_C5', 'Pct_Population_C5_dif',
+                                          'New_Infections_7davg', 'New_Infections_7davg_dif',
+                                          'Incedent_rate', 'Incedent_rate_dif',
+                                          'Population']]            
+
+df_agg_fin = df_agg_fin.rename(columns={"Pct_Countries_C5": "Cntry_C5", "Pct_Countries_C5_dif": "Cntry_C5_dif", 
+                                        "Pct_Population_C5": "Pop_C5", "Pct_Population_C5_dif": "Pop_C5_dif", 
+                                        "New_Infections_7davg": "New_Inf_7davg", "New_Infections_7davg_dif": "New_Inf_7davg_dif", 
+                                        "Incedent_rate": "Inc_rate", "Incedent_rate_dif": "Inc_rate_dif"                                      
+                                        })
+
+st.dataframe(df_agg_fin.style.format({'Cntry_C5': "{:.1%}", 'Cntry_C5_dif': "{:.1%}p",
+                                      'Pop_C5': "{:.1%}", 'Pop_C5_dif': "{:.1%}p",
+                                      'New_Inf_7davg': "{:0<1.0f}", 'New_Inf_7davg_dif': "{:0<1.0f}",
+                                      'Inc_rate': "{:0<.1f}", 'Inc_rate_dif': "{:0<.1f}",
+                                      'Population': "{:0<1.0f}"
+                                      }))
+```
 
 
 
+```
+
+#(4) Graphische Darstellung der Clusterverteilung der 3 Regionen    
+###### Graphische Darstellung der Clusterverteilung der 3 Regionen #################
+#df_aggreg.to_excel(locpath1+"covid_ana_day_agg_cluster.xlsx", sheet_name='Tabelle1')
+
+    
+st.subheader('And now the distribution of the 5 cluster for the four regions.')    
+    
+df_aggreg = pd.read_excel(locpath1+"covid_ana_day_agg_cluster.xlsx", keep_default_na=False)
+df_aggreg = df_aggreg.loc[:,['cluster_NM', 'Region_GRP', 'pctpop', 'pctcntr']]            
+
+# needed to fill up empty clusters with 0 
+df_aggregfull = pd.DataFrame({'cluster_NM': ['C0', 'C1', 'C2', 'C3', 'C4', 'C5', 'C0', 'C1', 'C2', 'C3', 'C4', 'C5', 'C0', 'C1', 'C2', 'C3', 'C4', 'C5', 'C0', 'C1', 'C2', 'C3', 'C4', 'C5'],
+                              'Region_GRP': ['AFNO', 'AFNO', 'AFNO', 'AFNO', 'AFNO', 'AFNO', 'AP', 'AP', 'AP', 'AP', 'AP', 'AP', 'EU', 'EU', 'EU', 'EU', 'EU', 'EU', 'NASA', 'NASA', 'NASA', 'NASA', 'NASA', 'NASA'],
+                              'pctpop0': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                              'pctcntr0': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]})
+df_aggreg = pd.merge(df_aggregfull, df_aggreg, how='left', on=['cluster_NM', 'Region_GRP'])
+
+df_aggreg['pctpop1'] = df_aggreg.pctpop.combine_first(df_aggreg.pctpop0)
+df_aggreg['pctcntr1'] = df_aggreg.pctcntr.combine_first(df_aggreg.pctcntr0)
+
+df_aggreg = df_aggreg.drop(columns=['pctpop', 'pctcntr', 'pctpop0', 'pctcntr0'])
+df_aggreg = df_aggreg.rename(columns={"pctpop1": "pctpop", "pctcntr1": "pctcntr"})
+
+#print(df_aggreg)
+df_aggregAFNO = df_aggreg[df_aggreg['Region_GRP'].isin(['AFNO'])]
+df_aggregAP = df_aggreg[df_aggreg['Region_GRP'].isin(['AP'])]
+df_aggregEU = df_aggreg[df_aggreg['Region_GRP'].isin(['EU'])]
+df_aggregNASA = df_aggreg[df_aggreg['Region_GRP'].isin(['NASA'])]
+
+
+labels = ['C0', 'C1', 'C2', 'C3', 'C4', 'C5']
+
+x = np.arange(len(labels))  # the label locations
+width = 0.15  # the width of the bars
+
+fig, ax = plt.subplots()
+##rects1 = ax.bar(x - width/2, men_means, width, label='Men')
+rects1 = ax.bar(x - width/1, df_aggregAFNO['pctpop'], width, label='AFNO')
+rects2 = ax.bar(x, df_aggregAP['pctpop'], width, label='AP')
+rects3 = ax.bar(x + width/1, df_aggregEU['pctpop'], width, label='EU')
+rects4 = ax.bar(x + 2*width/1, df_aggregNASA['pctpop'], width, label='NASA')
+
+ax.set_ylabel('Percentage Population')
+ax.set_title('Cluster Distribution of Population by Region')
+ax.set_xticks(x)
+ax.set_xticklabels(labels)
+ax.legend()
+
+fig.tight_layout()
+st.pyplot(fig)
+#plt.show()
+
+
+fig, ax = plt.subplots()
+##rects1 = ax.bar(x - width/2, men_means, width, label='Men')
+rects1 = ax.bar(x - width/1, df_aggregAFNO['pctcntr'], width, label='AFNO')
+rects2 = ax.bar(x , df_aggregAP['pctcntr'], width, label='AP')
+rects3 = ax.bar(x + width/1, df_aggregEU['pctcntr'], width, label='EU')
+rects4 = ax.bar(x + 2*width/1, df_aggregNASA['pctcntr'], width, label='NASA')
+
+ax.set_ylabel('Percentage Countries')
+ax.set_title('Cluster Distribution Countries by Region')
+ax.set_xticks(x)
+ax.set_xticklabels(labels)
+ax.legend()
+
+fig.tight_layout()
+st.pyplot(fig)
+```
 
 
 ### 4 - From local to cloud
