@@ -1,9 +1,9 @@
 # Publishing a data science project 
 
 ### CONTENT
- -[1 - Starting point - to have a (data science) question](#1 - Starting point - to have a (data science) question) 
- -[2 - Data science software](#2 - Data science software)
- -[3 - Data analysis](#3 - Data analysis)
+#[1 - Starting point - to have a (data science) question](#1 - Starting point - to have a (data science) question) 
+#[2 - Data science software](#2 - Data science software)
+#[3 - Data analysis](#3 - Data analysis)
   - 3a - Data Preparation
   - 3b - Web Application
 - 4 - From local to cloud
