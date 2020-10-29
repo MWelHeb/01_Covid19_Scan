@@ -1238,7 +1238,25 @@ Here is a screen shot that shows how this code turns out in the browser:
 
 ### 4 - From local to cloud
 
-This section deals with the topic to provide the analysis above (or any other analysis) to a broad and potentially word wide audience. For that purpose we need to shift the analysis which is currently conducted locally on my computer to a server or cloud environement. Moreover my goal was not to spend any moneny on this topic.  
+This section deals with the topic to provide the analysis above (or any other analysis) to a broad and potentially word wide audience. For that purpose we need to shift the analysis which is currently conducted on a local computer/client to a server or cloud environement. Moreover my goal was not to spend any moneny on this topic.  
+
+- What Cloud services exist: Amazon, ...
+
+- Settung up an EC2 Instance 
+  - tools need to access the EC2 instance
+  - Elastice IP
+  
+- Installing Python and all relevant packages on the EC2 Instance
+
+- Cronjob for repeating jobs
+
+- Tmux in order to separte Streamlit from terminal environement 
+
+- Open issues: Instablilty of EC2 
+
+
+
+
 
 
 
