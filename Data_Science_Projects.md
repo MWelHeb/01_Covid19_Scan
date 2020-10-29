@@ -1,6 +1,4 @@
-# Publishing a data science project
-
-## I – ANALYZING THE COVID 19 INFECTION DEVELOPMENT
+# Publishing a data science project 
 
 ### CONTENT
 ### 1 - Starting point - to have a (data science) question. 
