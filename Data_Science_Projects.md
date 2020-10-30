@@ -1,12 +1,12 @@
 # Publishing a data science project 
 
 ### CONTENT
-[- Starting point](1-Startingpoint)
-[- Data science software]()
-[- Data analysis]()
-   [- Data Preparation]()
-   [- Web Application]()
-[- From local to cloud]()
+-[- Starting point](1-Startingpoint)
+-[- Data science software]()
+-[- Data analysis]()
+-[- Data Preparation]()
+-[- Web Application]()
+-[- From local to cloud]()
 
 ### -----------------------------------------------------------------------------------------------------------------------------
 ### 1 - Starting point
