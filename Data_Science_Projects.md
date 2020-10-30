@@ -1,7 +1,7 @@
 # Publishing a data science project 
 
 ### CONTENT
-[1 - Starting point - to have a (data science) question](1-Startingpoint-tohaveadata sciencequestion)
+[1 - Starting point](1-Startingpoint)
 ### 2 - Data science software
 ### 3 - Data analysis
   #### 3a - Data Preparation
@@ -9,9 +9,9 @@
 ### 4 - From local to cloud
 
 ### -----------------------------------------------------------------------------------------------------------------------------
-### 1 - Starting point - to have a data science question 
+### 1 - Starting point 
 
-In my case - at the beginning of the covid crisis - I was very much interested in having an overview on the status of covid19 infections in the various countries at each point in time. Working in the airline industry I was particularly interested in so-called online countries, i.e. countries which had formerly, i.e. before the covid19 breakout, been online connected by the airline under consideration. Idea was to early identify those countries which had covid19 "under control", because these would be the first countries, where airline travel demand would pick up again. 
+The starting point of every data science project is to have some kind of (data science) question. In my case - at the beginning of the covid crisis - I was very much interested in having an overview on the status of covid19 infections in the various countries at each point in time. Working in the airline industry I was particularly interested in so-called online countries, i.e. countries which had formerly, i.e. before the covid19 breakout, been online connected by the airline under consideration. Idea was to early identify those countries which had covid19 "under control", because these would be the first countries, where airline travel demand would pick up again. 
 
 My goal was not to rely on any third-party reports which I could not modify or update according to my interests and needs (e.g. which countries are displayed, which figures are shown, which time comparison is displayed etc.) but to build up an analysis/report which reflected my approach of describing the current covid situation. The basic idea was to somehow scan the typical (i.e. "bell shaped") covid curve of new infections for each and every country and then to position each country on such a "typical generic bell shaped covid curve" in order to get an overview on one page. 
 
