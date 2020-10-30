@@ -1,7 +1,7 @@
 # Publishing a data science project 
 
 ### CONTENT
-### [1 - Starting point](#some-id)
+### [1 - Starting point](some-id)
 ### -[Data science software]()
 ### -[Data analysis]()
 ### -[Data Preparation]()
