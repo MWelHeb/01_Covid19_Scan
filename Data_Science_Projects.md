@@ -1,7 +1,7 @@
 # Publishing a data science project 
 
 ### CONTENT
-[1 - Starting point](1-Startingpoint)
+[1 - Starting point](1-Starting point)
 ### 2 - Data science software
 ### 3 - Data analysis
   #### 3a - Data Preparation
