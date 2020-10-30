@@ -4,9 +4,9 @@
 ### [1 - Starting point](#id1)
 ### [2 - Data science software](#id2)
 ### [3 - Data analysis](#id3)
-#### [  3a - Data Preparation](#id3a)
-#### [Web Application]()
-### -[From local to cloud]()
+#### [3a - Data Preparation](#id3a)
+#### [3b - Web Application](#id3b)
+### [4 - From local to cloud](#id4)
 
 ### -----------------------------------------------------------------------------------------------------------------------------
 ### <a name="id1"></a>1 - Starting point
@@ -749,7 +749,7 @@ df_agg_fin = pysqldf(q)
 df_agg_fin.to_excel(locpath1+"covid_ana_day_agg.xlsx", sheet_name='Tabelle1')
 ```
 
-#### 3b - Web Application
+#### <a name="id3b"></a>3b - Web Application
 
 After much work has been done with regards to data preperation and analysis a key topic for me is always the aspect of presenting the results and conclusions to the audience or the project sponsor. Obviously in many cases analysis results are presented by means of setting up a respective power point deck which contains the key take aways and main implications. However such an approach is very "static" and does not allow e.g. to interactively demonstrate analysis results regarding questions which come up and might be required during the presentation/discussion. A far better way to present results would be to use a BI application that supports visualization of results/analysis in a very easy way via a web application (e.g. such as tools like Tableau, Cognos, etc. do). When searching for something comparable with the Python Ecosystem I quickly was confronted with Streamlit. Streamlit declares itself to provide "The fastest way to build and share data apps" and that was actually what I was looking for ;-). So I started to dig deeper into this topic.    
 
@@ -1235,7 +1235,7 @@ Here is a screen shot that shows how this code turns out in the browser:
 ![Streamlit_Screenshot5](Streamlit_scrsh5.JPG)
 
 
-### 4 - From local to cloud
+### <a name="id4"></a>4 - From local to cloud
 
 This section deals with the topic to provide the analysis above (or any other analysis) to a broad and potentially word wide audience. For that purpose we need to shift the analysis which is currently conducted on a local computer/client to a server or cloud environement. Moreover my goal was not to spend any moneny on this topic.  
 
