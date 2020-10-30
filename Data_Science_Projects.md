@@ -1,15 +1,15 @@
 # Publishing a data science project 
 
 ### CONTENT
-### [1 - Starting point](some-id)
-### -[Data science software]()
-### -[Data analysis]()
-### -[Data Preparation]()
-### -[Web Application]()
+### [1 - Starting point](#id1)
+### [2 - Data science software](#id2)
+### [3 - Data analysis](#id3)
+#### [  3a - Data Preparation](#id3a)
+#### [Web Application]()
 ### -[From local to cloud]()
 
 ### -----------------------------------------------------------------------------------------------------------------------------
-### <a name="some-id"></a>1 - Starting point
+### <a name="id1"></a>1 - Starting point
 The starting point of every data science project is to have some kind of (data science) question. In my case - at the beginning of the covid crisis - I was very much interested in having an overview on the status of covid19 infections in the various countries at each point in time. Working in the airline industry I was particularly interested in so-called online countries, i.e. countries which had formerly, i.e. before the covid19 breakout, been online connected by the airline under consideration. Idea was to early identify those countries which had covid19 "under control", because these would be the first countries, where airline travel demand would pick up again. 
 
 My goal was not to rely on any third-party reports which I could not modify or update according to my interests and needs (e.g. which countries are displayed, which figures are shown, which time comparison is displayed etc.) but to build up an analysis/report which reflected my approach of describing the current covid situation. The basic idea was to somehow scan the typical (i.e. "bell shaped") covid curve of new infections for each and every country and then to position each country on such a "typical generic bell shaped covid curve" in order to get an overview on one page. 
@@ -18,7 +18,7 @@ The basic idea is sketched on following two slides:
 ![Desc1](Description_Covid_Scan_page1.jpg)
 ![Desc2](Description_Covid_Scan_page2.jpg)
 
-### 2 - Data science software
+### <a name="id2"></a>2 - Data science software
 
 Apart from the (data science) question you obviously have to have access to a data science software that provides the required functionalities you need in order to collect, modify/manipulate and finally analyse and display the data and results.
 
@@ -28,14 +28,14 @@ How to install Python in which version and with which modules? There are various
 
 After having installed Anaconda you have a set of programming editors and IDEs (e.g. Jupyter Notebook, JupytherLab, Spyder, PyCharm, etc.) at hand. For a nice overview and comparison of such Python IDEs and code editors see under following [Link](https://www.datacamp.com/community/tutorials/top-python-ides-for-2019). I have started of with JupytherLab and later additionally also used Spyder.
 
-### 3 - Data analysis
+### <a name="id3"></a>3 - Data analysis
 
 In the following I will describe the various steps of the data analysis which have been conducted including the corresponding python script. If you would like to see the full final python scripts please look here:
 
 - [Data_Preparation_(01__run_covid_sv_1.py)](01_run_covid_sv_1.py)
 - [Web_Application_(02_web_covid_sv_1.py)](02_web_covid_sv_1.py)
 
-#### 3a - Data Preparation
+#### <a name="id3a"></a>3a - Data Preparation
 
 The first script is focussing on preprocessing the data and doing the necessary calculations for the analysis. After this has been done the preprocessed data is than being stored in some Excel files. The second script reads/opens this preprocessed data and than focuses in particular on displaying the results to the enduser. 
 
