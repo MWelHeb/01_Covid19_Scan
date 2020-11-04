@@ -1240,7 +1240,11 @@ Here is a screen shot that shows how this code turns out in the browser:
 This section deals with the topic to provide the analysis above (or any other analysis) in an automated way to a broad and potentially word wide audience. For that purpose we need to shift the analysis which is currently being conducted on a local computer/client to a server or cloud environement. Moreover my goal was not to spend any moneny on this topic but to work with free tier products/software solutions.  
 
 ##### Free Cloud Hosting Services
-Many companies claim to offer free cloud hosting and there are various [overviews and comparison on different cloud providers](https://www.websiteplanet.com/blog/best-free-cloud-hosting-services/)
+Many companies claim to offer free cloud hosting and there are various [overviews and comparison on different cloud providers](https://www.websiteplanet.com/blog/best-free-cloud-hosting-services/). To be honest I did not really dive deep into each offer of the  different cloud providers but decided pretty fast for Amazon Web Services (AWS). There you have the possibility to set up a free so-called EC2 Instance.
+
+
+https://www.youtube.com/watch?v=qUHQuZjTOFA
+
 
 yet few offer anything worth using.
 
