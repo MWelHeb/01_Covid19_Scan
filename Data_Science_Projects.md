@@ -18,7 +18,7 @@ The basic idea is sketched on following two slides:
 ![Desc1](Description_Covid_Scan_page1.jpg)
 ![Desc2](Description_Covid_Scan_page2.jpg)
 
-### <a name="id2"></a>2 - Data science software
+### <a name="id2"></a>2 - Data science software [(Back to the Top)](#id0)
 
 Apart from the (data science) question you obviously have to have access to a data science software that provides the required functionalities you need in order to collect, modify/manipulate and finally analyse and display the data and results.
 
@@ -28,14 +28,14 @@ How to install Python in which version and with which modules? There are various
 
 After having installed Anaconda you have a set of programming editors and IDEs (e.g. Jupyter Notebook, JupytherLab, Spyder, PyCharm, etc.) at hand. For a nice overview and comparison of such Python IDEs and code editors see under following [Link](https://www.datacamp.com/community/tutorials/top-python-ides-for-2019). I have started of with JupytherLab and later additionally also used Spyder.
 
-### <a name="id3"></a>3 - Data analysis
+### <a name="id3"></a>3 - Data analysis [(Back to the Top)](#id0)
 
 In the following I will describe the various steps of the data analysis which have been conducted including the corresponding python script. If you would like to see the full final python scripts please look here:
 
 - [Data_Preparation_(01__run_covid_sv_1.py)](01_run_covid_sv_1.py)
 - [Web_Application_(02_web_covid_sv_1.py)](02_web_covid_sv_1.py)
 
-#### <a name="id3a"></a>3a - Data Preparation
+#### <a name="id3a"></a>3a - Data Preparation [(Back to the Top)](#id0)
 
 The first script is focussing on preprocessing the data and doing the necessary calculations for the analysis. After this has been done the preprocessed data is than being stored in some Excel files. The second script reads/opens this preprocessed data and than focuses in particular on displaying the results to the enduser. 
 
@@ -749,7 +749,7 @@ df_agg_fin = pysqldf(q)
 df_agg_fin.to_excel(locpath1+"covid_ana_day_agg.xlsx", sheet_name='Tabelle1')
 ```
 
-#### <a name="id3b"></a>3b - Web Application
+#### <a name="id3b"></a>3b - Web Application [(Back to the Top)](#id0)
 
 After much work has been done with regards to data preperation and analysis a key topic for me is always the aspect of presenting the results and conclusions to the audience or the project sponsor. Obviously in many cases analysis results are presented by means of setting up a respective power point deck which contains the key take aways and main implications. However such an approach is very "static" and does not allow e.g. to interactively demonstrate analysis results regarding questions which come up and might be required during the presentation/discussion. A far better way to present results would be to use a BI application that supports visualization of results/analysis in a very easy way via a web application (e.g. such as tools like Tableau, Cognos, etc. do). When searching for something comparable with the Python Ecosystem I quickly was confronted with Streamlit. Streamlit declares itself to provide "The fastest way to build and share data apps" and that was actually what I was looking for ;-). So I started to dig deeper into this topic.    
 
@@ -1235,9 +1235,14 @@ Here is a screen shot that shows how this code turns out in the browser:
 ![Streamlit_Screenshot5](Streamlit_scrsh5.JPG)
 
 
-### <a name="id4"></a>4 - From local to cloud
+### <a name="id4"></a>4 - From local to cloud [(Back to the Top)](#id0)
 
-This section deals with the topic to provide the analysis above (or any other analysis) to a broad and potentially word wide audience. For that purpose we need to shift the analysis which is currently conducted on a local computer/client to a server or cloud environement. Moreover my goal was not to spend any moneny on this topic.  
+This section deals with the topic to provide the analysis above (or any other analysis) in an automated way to a broad and potentially word wide audience. For that purpose we need to shift the analysis which is currently being conducted on a local computer/client to a server or cloud environement. Moreover my goal was not to spend any moneny on this topic but to work with free tier products/software solutions.  
+
+##### Free Cloud Hosting Services
+Many companies claim to offer free cloud hosting and there are various [overviews and comparison on different cloud providers](https://www.websiteplanet.com/blog/best-free-cloud-hosting-services/)
+
+yet few offer anything worth using.
 
 - What Cloud services exist: Amazon, ...
 
