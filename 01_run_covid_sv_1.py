@@ -4,6 +4,7 @@ Created on Wed Jun 10 17:05:58 2020
 @author: Marc Wellner
 """
 #Project Covid Scan on Web 
+#Import packages 
 import pandas as pd
 import numpy as np
 import datetime
@@ -30,8 +31,8 @@ from pandasql import sqldf
 
 
 #locpath0 = "C:/Users/Marc Wellner/01_projects/streamlit/00_stammdaten/"
-#locpath1 = "C:/Users/Marc Wellner/01_projects/streamlit/01_covid_scan/01_data/"
-locpath0 = "/home/ubuntu//00_stammdaten/"
+#llocpath1 = "C:/Users/Marc Wellner/01_projects/streamlit/01_covid_scan/01_data/"
+locpath0 = "/home/ubuntu/00_stammdaten/"
 locpath1 = "/home/ubuntu/01_covid_scan/01_data/"
 
 
@@ -47,7 +48,7 @@ confirmed = pd.read_csv(url, error_bad_lines=False)
 
 # fix region names
 confirmed['Country/Region']= confirmed['Country/Region'].str.replace("Mainland China", "China")
-confirmed['Country/Region']= confirmed['Country/Region'].str.replace("US", "Unites States")
+confirmed['Country/Region']= confirmed['Country/Region'].str.replace("US", "United States")
 
 
 #####################################################################################
@@ -78,7 +79,6 @@ confirmed_cntp.loc[confirmed_cntp.confi_err == 1, 'confi_new'] = 0
 #calculate 
   # moving average of nf for (a) 3 days (b) 7 days (c) day 8 to 14
   # moving average of nf gr for (a) 3 days (b) 7 days (c) day 8 to 14
-
 
 # Ansatz 1 
 confirmed_cntp['ma3d'] = confirmed_cntp.groupby(['Country/Region'])['confi_new'].rolling(3).mean().reset_index(0,drop=True)
@@ -130,7 +130,7 @@ confirmed_cntp['clusterp7'] = confirmed_cntp.cluster.shift(7)
 ######confirmed_cntrystamm = pd.read_excel("confirmed_ctrystamm.xlsx", keep_default_na=False,error_bad_lines=False)
 ######confirmed_cntrystamm = pd.read_excel("C:/Users/Marc Wellner/01_projects/streamlit/00_stammdaten/confirmed_ctrystamm.xlsx", keep_default_na=False,error_bad_lines=False)
 
-confirmed_cntrystamm = pd.read_excel(locpath0+"confirmed_ctrystamm.xlsx", keep_default_na=False,error_bad_lines=False)
+confirmed_cntrystamm = pd.read_excel(locpath0+"confirmed_ctrystamm.xlsx", keep_default_na=False)
 confirmed_cntpfull = pd.merge(left=confirmed_cntp, right=confirmed_cntrystamm, how='left', left_on='Country/Region', right_on='Cntry_NM')
 
 confirmed_cntpfull['incident'] = confirmed_cntpfull['confi_new']/confirmed_cntpfull['population']*100000
@@ -139,6 +139,27 @@ confirmed_cntpfull['incident7dp7'] = confirmed_cntpfull.incident7d.shift(7)
 
 confirmed_cntpfull['confi_estshpop'] = confirmed_cntpfull['confi']*10/confirmed_cntpfull['population']
 confirmed_cntpfull['daysdouble'] = confirmed_cntpfull.confi.shift(7)/confirmed_cntpfull.ma7d
+
+# Auschluss von Nicht-Ländern
+confirmed_cntpfull = confirmed_cntpfull[(confirmed_cntpfull['Cntry_CD'] != '')]
+confirmed_cntpfull = confirmed_cntpfull[(confirmed_cntpfull['Rank_Pop'].notnull())]
+
+#df.loc[df['Survive'].notnull()
+
+#'Solomon Islands'
+#confirmed_cntpfull['Cntry_CD'] = confirmed_cntpfull['Cntry_CD'].replace('', 'XX')
+#confirmed_cntpfull = confirmed_cntpfull[(confirmed_cntpfull['Cntry_CD'] != 'XX')]
+#confirmed_cntpfull = confirmed_cntpfull[(confirmed_cntpfull['Rank_Pop'] != '')]
+
+#test = confirmed_cntpfull[(confirmed_cntpfull['Cntry_CD'] == 'XX')]
+#print(test)
+#pd.set_option('display.max_rows', 500)
+#pd.set_option('display.max_rows', 100, 'display.max_columns', 50)
+#print(confirmed_cntpfull)
+#test = confirmed_cntpfull[(confirmed_cntpfull['Country/Region'] == 'Solomon Islands')]
+#print(test)
+#df.replace(r'^\s*$', np.nan, regex=True)
+
 #print(confirmed_cntpfull)
 #confirmed_cntpfull.dtypes
 
@@ -274,7 +295,7 @@ for i in range(rows):
 #####################################################################################
 # (7) Calculation of covid scan and print into pdf
     
-df = pd.read_excel(locpath1+"covid_ana_day1.xlsx", keep_default_na=False,error_bad_lines=False)
+df = pd.read_excel(locpath1+"covid_ana_day1.xlsx", keep_default_na=False)
 #df = confirmed_cntpselday    
 
 #df = df[(df.index<=78) & (df.confi>=1000)] 
@@ -397,7 +418,7 @@ ploti('All_Countries')
 #######################################################################
 # Selectionen nach REgionen AF AP EU NA NO SA 
 # AP
-df = pd.read_excel(locpath1+"covid_ana_day1.xlsx", keep_default_na=False,error_bad_lines=False)
+df = pd.read_excel(locpath1+"covid_ana_day1.xlsx", keep_default_na=False)
 #df = confirmed_cntpselday    
 
 df = df[(df.Region_CD == 'AP')] 
@@ -421,7 +442,7 @@ ploti('Asia_Pacific')
 
 
 # AF NO
-df = pd.read_excel(locpath1+"covid_ana_day1.xlsx", keep_default_na=False,error_bad_lines=False)
+df = pd.read_excel(locpath1+"covid_ana_day1.xlsx", keep_default_na=False)
 #df = confirmed_cntpselday    
 
 df = df[(df.Region_CD == 'AF') | (df.Region_CD == 'NO')] 
@@ -444,7 +465,7 @@ ploti('Africa_Middle_East')
 
 
 # NA SA
-df = pd.read_excel(locpath1+"covid_ana_day1.xlsx", keep_default_na=False,error_bad_lines=False)
+df = pd.read_excel(locpath1+"covid_ana_day1.xlsx", keep_default_na=False)
 #df = confirmed_cntpselday    
 
 df = df[(df.Region_CD == 'NA') | (df.Region_CD == 'SA')] 
@@ -467,7 +488,7 @@ ploti('Americas')
 
 
 # EU
-df = pd.read_excel(locpath1+"covid_ana_day1.xlsx", keep_default_na=False,error_bad_lines=False)
+df = pd.read_excel(locpath1+"covid_ana_day1.xlsx", keep_default_na=False)
 #df = confirmed_cntpselday    
 
 df = df[(df.Region_CD == 'EU')] 
@@ -495,7 +516,7 @@ ploti('Europe')
 
 
 
-df = pd.read_excel(locpath1+"covid_ana_day1.xlsx", keep_default_na=False,error_bad_lines=False)
+df = pd.read_excel(locpath1+"covid_ana_day1.xlsx", keep_default_na=False)
 
 #pd.set_option("display.max_columns", 100) 
 #print(df)
