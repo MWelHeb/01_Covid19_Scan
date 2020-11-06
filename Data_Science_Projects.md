@@ -1255,16 +1255,22 @@ Next is to install step by step first Python3 by means of the package manager pi
 
 ```
 sudo apt install python3-pip
+
 install discord.py 
+
 pip3 install dicord.py
+
 sudo pip3 install numpy
+
 sudo pip3 install pandas
+
 ...
 ```
-Once all required programs have been install you could run any Python program (e.g. named as test.py) by means of following command.
+Once all required programs have been installed it is possible run any Python program (e.g. named as test.py) by means of following command.
 ```
 python3 test.py
 ```
+
 
 
 
