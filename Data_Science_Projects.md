@@ -1240,10 +1240,10 @@ Here is a screen shot that shows how this code turns out in the browser:
 This section deals with the topic to provide the analysis above (or any other analysis) in an automated way to a broad and potentially word wide audience. For that purpose we need to shift the analysis which is currently being conducted on a local computer/client to a server or cloud environement. Moreover my goal was not to spend any moneny on this topic but to work with free tier products/software solutions.  
 
 ##### Free Cloud Hosting Services
-Many companies claim to offer free cloud hosting and there are various [overviews and comparison on different cloud providers](https://www.websiteplanet.com/blog/best-free-cloud-hosting-services/). To be honest I did not really dive deep into each offer of the  different cloud providers but decided pretty fast for Amazon Web Services (AWS). There you have the possibility to set up a free so-called EC2 Instance.
+Many companies claim to offer free cloud hosting and there are various [overviews and comparison on different cloud providers](https://www.websiteplanet.com/blog/best-free-cloud-hosting-services/). To be honest I did not realy dive very deep into each offer of the different cloud providers such as Amazon Web Services (AWS), Google Compute Platform (GCP), Microsoft Azure, Heroku, etc. but decided pretty fast for Amazon Web Services (AWS). There you have the possibility to set up a 12 months free tier so-called EC2 Instance. The required steps to set up such a cloud envirnoment and to install Python and other relevant programs and packages are decribed in various videos and blogs such the [following video](https://www.youtube.com/watch?v=qUHQuZjTOFA). Apart from setting up an EC2 Instance there is also the requirement to have tools at hand which allow you to issue commands on teh cloud environement and to up- and download files from your local computer to the cloud and back again. In order to issue commands on the clould I have installed the command line interface [PuttY](https://www.putty.org/). For the purpose of transfering files between the local pc and the EC2 Instance I have decided for the FTP program [FileZilla](https://filezilla-project.org/).
 
+#
 
-https://www.youtube.com/watch?v=qUHQuZjTOFA
 
 
 yet few offer anything worth using.
