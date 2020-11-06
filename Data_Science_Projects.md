@@ -1242,6 +1242,9 @@ This section deals with the topic of providing the analysis above (or any other 
 ##### Free Cloud Hosting Services
 Many companies claim to offer free cloud hosting and there are various [overviews and comparison on different cloud providers](https://www.websiteplanet.com/blog/best-free-cloud-hosting-services/). To be honest I did not realy dive very deep into each offer of the different cloud providers such as Amazon Web Services (AWS), Google Compute Platform (GCP), Microsoft Azure, Heroku, etc. but decided pretty fast for Amazon Web Services (AWS). There you have the possibility to set up a 12 months free tier so-called EC2 Instance. The required steps to set up such a cloud envirnoment and to install Python and other relevant programs and packages are decribed in various videos and blogs such the [following video](https://www.youtube.com/watch?v=qUHQuZjTOFA). 
 
+-Port 8501
+-Elastice IP
+
 ##### Connecting to the cloud environment
 Apart from setting up an EC2 Instance there is also the requirement to have tools at hand which allow you to issue commands on teh cloud environement and to up- and download files from your local computer to the cloud and back again. In order to issue commands on the clould I have installed the command line interface [PuttY](https://www.putty.org/). For the purpose of transfering files between the local pc and the EC2 Instance I have decided for the FTP program [FileZilla](https://filezilla-project.org/).
 
@@ -1276,6 +1279,13 @@ Now after having installed on the EC2 Instance all the packages (e.g. pandas num
 - [Web_Application_(02_web_covid_sv_1.py)](02_web_covid_sv_2.py)
 
 also in the cloud. 
+
+
+- Cronjob for repeating jobs
+
+- Tmux in order to separte Streamlit from terminal environement 
+
+
 
 
 
