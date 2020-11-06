@@ -33,7 +33,7 @@ After having installed Anaconda you have a set of programming editors and IDEs (
 In the following I will describe the various steps of the data analysis which have been conducted including the corresponding python script. If you would like to see the full final python scripts please look here:
 
 - [Data_Preparation_(01__run_covid_sv_1.py)](01_run_covid_sv_1.py)
-- [Web_Application_(02_web_covid_sv_1.py)](02_web_covid_sv_1.py)
+- [Web_Application_(02_web_covid_sv_1.py)](02_web_covid_sv_2.py)
 
 #### <a name="id3a"></a>3a - Data Preparation [(Back to the Top)](#id0)
 
@@ -1270,7 +1270,12 @@ Once all required programs have been installed it is possible run any Python pro
 ```
 python3 test.py
 ```
+Now after having installed on the EC2 Instance all the packages (e.g. pandas numpy, datetime, requests, matplotlib, sqlite3, pandasql, streamlit, etc.) which are needed for our programs above we are ready to run the full final python scripts. 
 
+- [Data_Preparation_(01__run_covid_sv_1.py)](01_run_covid_sv_1.py)
+- [Web_Application_(02_web_covid_sv_1.py)](02_web_covid_sv_2.py)
+
+also in the cloud. 
 
 
 
