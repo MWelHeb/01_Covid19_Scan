@@ -1237,24 +1237,21 @@ Here is a screen shot that shows how this code turns out in the browser:
 
 ### <a name="id4"></a>4 - From local to cloud [(Back to the Top)](#id0)
 
-This section deals with the topic of providing the analysis above (or any other analysis) in an automated way to a broad and potentially word wide audience. For that purpose we need to shift the analysis which is currently being conducted on a local computer/client to a server or cloud environement. Moreover my goal was not to spend any moneny on this topic but to work with free tier products/software solutions.  
+This section deals with the topic of providing the analysis above (or any other analysis) in an automated way to a broader and potentially word wide audience. For that purpose we need to shift the analysis which is currently being conducted on a local computer/client to a server or cloud environement. Moreover my goal was not to spend any moneny on this topic but to work with free tier products/software solutions.  
 
 ##### Free Cloud Hosting Services
-Many companies claim to offer free cloud hosting and there are various [overviews and comparison on different cloud providers](https://www.websiteplanet.com/blog/best-free-cloud-hosting-services/). To be honest I did not realy dive very deep into each offer of the different cloud providers such as Amazon Web Services (AWS), Google Compute Platform (GCP), Microsoft Azure, Heroku, etc. but decided pretty fast for Amazon Web Services (AWS). There you have the possibility to set up a 12 months free tier so-called EC2 Instance. The required steps to set up such a cloud envirnoment and to install Python and other relevant programs and packages are decribed in various videos and blogs such the [following video](https://www.youtube.com/watch?v=qUHQuZjTOFA). 
-
--Port 8501
--Elastice IP
+Many companies claim to offer free cloud hosting and there are various [overviews and comparison on different cloud providers](https://www.websiteplanet.com/blog/best-free-cloud-hosting-services/). To be honest I did not realy dive very deep into each offer of the different cloud providers such as Amazon Web Services (AWS), Google Compute Platform (GCP), Microsoft Azure, Heroku, etc. but decided pretty fast for Amazon Web Services (AWS). There you have the possibility to set up a so-called EC2 Instance which can be used for 12 months in a free tier mode. The required steps to set up such a cloud envirnoment and to install Python and other relevant programs and packages are decribed in various videos and blogs such the [following video](https://www.youtube.com/watch?v=qUHQuZjTOFA). A further aspect which you need to consider when setting up the EC2 Instance which you want to use in order to run Streamlit apps is that under the "Configure Security Group” tab you need to add a rule with Type: “Custom TCP Rule”, Port Range:8501, and Source: Anywhere. The port 8501 is used here since it is the custom port used by Streamlit. If want to run more than one Streamit app at the same time - you may want to add further ports such as 8502, 8503, 8504, etc. because Streamit uses for every further app the next port number. Finally I recommend you to set up an an Elastic IP address. This is static IP-address which has the advantage that it does not change over time and hence your Streamlit app will always be reachable under the same IP-address (for details see the following [link](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html). Moreover here you find a nice and short documentation on [how to Deploy a Streamlit App using an Amazon Free ec2 instance](https://towardsdatascience.com/how-to-deploy-a-streamlit-app-using-an-amazon-free-ec2-instance-416a41f69dc3).
 
 ##### Connecting to the cloud environment
-Apart from setting up an EC2 Instance there is also the requirement to have tools at hand which allow you to issue commands on teh cloud environement and to up- and download files from your local computer to the cloud and back again. In order to issue commands on the clould I have installed the command line interface [PuttY](https://www.putty.org/). For the purpose of transfering files between the local pc and the EC2 Instance I have decided for the FTP program [FileZilla](https://filezilla-project.org/).
+Apart from setting up an EC2 Instance there is also the requirement to have tools at hand which allow you to issue commands on the cloud environement and to up- and download files from your local computer to the cloud and back again. In order to issue commands on the clould I have installed the command line interface program [PuttY](https://www.putty.org/). For the purpose of transfering files between the local pc and the EC2 Instance I have decided to use the FTP program [FileZilla](https://filezilla-project.org/).
 
 ##### Installing Python and various packages
-Similar to the situation on your local pc you need to install on the cloud environment the data science programs which you need in order to run your analysis - in our case this is Python and its related packages (see above). Depending on the selected cloud platform, i.e. whether the clould is based e.g. on an Linux or Windows operating systems different commands and distribution/package manager might be used. In my case I selected an Ubuntu Linux server. After conncting to my EC2 instance with puTTY I first updated the server by typing in following command.
+Similar to the situation on your local pc you need to install on the cloud environment the data science programs which you need in order to run your analysis - in our case this is Python and its related packages (see above). Depending on the selected cloud platform, i.e. whether the clould is based e.g. on a Linux or Windows operating systems different commands and distribution/package manager might be used. In my case I selected an Ubuntu Linux server. After conncting to my EC2 instance with puTTY I first updated the server by typing in following command.
 
 ```
 sudo apt update
 ```
-Next is to install step by step first Python3 by means of the package manager pip and then further packages such as numpy, pandas, etc.
+In a next step I installed step by step first Python3 by means of the package manager pip and then further packages such as numpy, pandas, etc.. Below you can see the relevant commands
 
 ```
 sudo apt install python3-pip
@@ -1269,7 +1266,7 @@ sudo pip3 install pandas
 
 ...
 ```
-Once all required programs have been installed it is possible run any Python program (e.g. named as test.py) by means of following command.
+Once all required programs have been installed it is possible to run any Python program (e.g. named as test.py) by means of following command.
 ```
 python3 test.py
 ```
@@ -1280,6 +1277,7 @@ Now after having installed on the EC2 Instance all the packages (e.g. pandas num
 
 also in the cloud. 
 
+##### Program automation 
 
 - Cronjob for repeating jobs
 
