@@ -116,6 +116,8 @@ Obviously, one needs to translate these visual cluster definitions into some *op
 - Cluster 5: Low number of new daily Covid19 infections (compared to historical peak)
   - Avg 7 days level < 30% max avg 7 days level so far
 
+#### REMARK: In the acutal running program I have modified the clusters, so that the incident level also plays a role (given that this figure/measure plays an important role in terms of releasing/relieving travel restrictions). Additionally to criteria above there is a further rule, that a country has to have an incident level of under 50 in order to fall into cluster 5. Moreover, in order to fall into cluster 4 the incident level has to be under 100.
+
 If you look at the coding below you will see that there are various steps in between necessary in order to get to these final cluster affiliations. Moreover, apart from calculating the current cluster affiliation my goal is also to later on display the development/dynamic of cluster affiliation, i.e. to show if a country has remained within the cluster or shifted one cluster up or down since the last snap shot. 
 
 ```
