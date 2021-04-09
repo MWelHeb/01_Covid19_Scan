@@ -1,5 +1,5 @@
 
-<img src = "Description_Covid_Scan_page1.jpg" width="250"><img src = "Description_Covid_Scan_page2.jpg" width="250"><img src = "Python.jfif" width="150"><img src = "Streamlit_scrsh5.JPG" width="200"><img src = "Cloud.jfif" width="250">
+<img src = "Description_Covid_Scan_page1.jpg" width="250"><img src = "Description_Covid_Scan_page2.jpg" width="250"><img src = "Python.jfif" width="150"><img src = "Streamlit_scrsh5.JPG" width="200"><img src = "Cloud.jfif" width="200">
 
 
 # <a name="id0"></a>Publishing a data science project 
