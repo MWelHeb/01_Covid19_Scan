@@ -1,10 +1,5 @@
 
-<p align="left">I'm Left</p>
-<p align="center">I'm Center</p>
-<p align="right">I'm Right</p>
-
-<p style="text-align: right"> <a href="https://github.com/MWelHeb/empirical_eyes/blob/master/README.md">Back to emprical eyes</a> </p>
-
+<p align="right"> <a href="https://github.com/MWelHeb/empirical_eyes/blob/master/README.md">Back to emprical eyes</a> </p>
 
 <img src = "Python.jfif" width="150"><img src = "Description_Covid_Scan_page1.jpg" width="220"><img src = "Description_Covid_Scan_page2.jpg" width="220"><img src = "Streamlit_scrsh5.JPG" width="200"><img src = "Cloud.jfif" width="200">
 
