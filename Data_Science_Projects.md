@@ -1,6 +1,4 @@
 
-<div style="text-align: right"> [Back to emprical eyes](https://github.com/MWelHeb/empirical_eyes/blob/master/README.md) </div>
-
 <p style="text-align: right"> <a href="https://github.com/MWelHeb/empirical_eyes/blob/master/README.md">Back to emprical eyes</a> </p>
 
 
